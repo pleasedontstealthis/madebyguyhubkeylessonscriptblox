@@ -3,6 +3,8 @@ getgenv().deletewhendupefound = true
 getgenv().deletewhendupefound = true
 localplr = game.Players.LocalPlayer
 http = game:GetService("HttpService")
+
+
 do
 	local HttpService = game:GetService("HttpService")
 	local CFG_FILE = "guyhub_tco_config.json"
@@ -93,7 +95,7 @@ do
 		end)
 	end
 end
-mult = 4
+mult = 4 -- FINALLY THIS BECAME USEFUL!
 built = false
 colorbool = false
 stopped = false
@@ -189,6 +191,7 @@ do
 	local CoreGui = game:GetService("CoreGui")
 	local UIS = game:GetService("UserInputService")
 	local TweenService = game:GetService("TweenService")
+
 	local function themeCols()
 		local t = getgenv()._guyHubTheme
 		if t then return t end
@@ -210,11 +213,13 @@ do
 	local STROKE, TEXT, SUB = TC.STROKE, TC.TEXT, TC.SUB
 	local ACCENT, BTN = TC.ACCENT, TC.BTN
 	local TOGGLE_OFF, TOGGLE_ON = TC.TOGGLE_OFF, TC.TOGGLE_ON
+
 	local sg, main, tabBar, content, titleLbl
-	local tabs = {}
+	local tabs = {} -- name -> {btn, page, layout, y}
 	local currentTab = nil
 	local elements = {}
 	local drag = {on=false, start=nil, pos=nil}
+
 	local function corner(o, r)
 		local c = Instance.new("UICorner")
 		c.CornerRadius = UDim.new(0, r or 10)
@@ -238,6 +243,7 @@ do
 		p.Parent = o
 		return p
 	end
+
 	local CLICK_IDS = {6895079853, 421058925, 12222216, 15658610, 4612373902, 10066906500}
 	local function playUiClick(vol)
 		task.spawn(function()
@@ -268,6 +274,7 @@ do
 		end)
 	end
 	lib.playClick = playUiClick
+
 	function lib.makelib(title)
 		TC = themeCols()
 		BG, BG2, BG3 = TC.BG, TC.BG2, TC.BG3
@@ -287,6 +294,7 @@ do
 		if not sg.Parent then
 			sg.Parent = localplr:WaitForChild("PlayerGui")
 		end
+
 		main = Instance.new("Frame")
 		main.Name = "Main"
 		main.Size = UDim2.new(0, 460, 0, 280)
@@ -297,6 +305,7 @@ do
 		main.Active = true
 		main.Parent = sg
 		corner(main, 8)
+
 		local top = Instance.new("Frame")
 		top.Size = UDim2.new(1, 0, 0, 34)
 		top.BackgroundColor3 = BG2
@@ -304,6 +313,7 @@ do
 		top.BorderSizePixel = 0
 		top.Parent = main
 		corner(top, 8)
+
 		local topFix = Instance.new("Frame")
 		topFix.Size = UDim2.new(1, 0, 0, 16)
 		topFix.Position = UDim2.new(0, 0, 1, -16)
@@ -311,6 +321,7 @@ do
 		topFix.BackgroundTransparency = 0.4
 		topFix.BorderSizePixel = 0
 		topFix.Parent = top
+
 		titleLbl = Instance.new("TextLabel")
 		titleLbl.BackgroundTransparency = 1
 		titleLbl.Size = UDim2.new(1, -90, 1, 0)
@@ -322,6 +333,7 @@ do
 		titleLbl.Text = tostring(title or "TCO")
 		titleLbl.Parent = top
 		getgenv()._tcoMainTitleLabel = titleLbl
+
 		local minBtn = Instance.new("TextButton")
 		minBtn.Size = UDim2.new(0, 32, 0, 28)
 		minBtn.Position = UDim2.new(1, -72, 0.5, -14)
@@ -332,6 +344,7 @@ do
 		minBtn.TextSize = 18
 		minBtn.Parent = top
 		corner(minBtn, 6)
+
 		local closeBtn = Instance.new("TextButton")
 		closeBtn.Size = UDim2.new(0, 32, 0, 28)
 		closeBtn.Position = UDim2.new(1, -36, 0.5, -14)
@@ -342,6 +355,7 @@ do
 		closeBtn.TextSize = 14
 		closeBtn.Parent = top
 		corner(closeBtn, 6)
+
 		tabBar = Instance.new("ScrollingFrame")
 		tabBar.Name = "TabBar"
 		tabBar.Size = UDim2.new(1, -16, 0, 28)
@@ -352,17 +366,20 @@ do
 		tabBar.ScrollingDirection = Enum.ScrollingDirection.X
 		tabBar.CanvasSize = UDim2.new(0, 0, 0, 0)
 		tabBar.Parent = main
+
 		local tabList = Instance.new("UIListLayout")
 		tabList.FillDirection = Enum.FillDirection.Horizontal
 		tabList.SortOrder = Enum.SortOrder.LayoutOrder
 		tabList.Padding = UDim.new(0, 5)
 		tabList.Parent = tabBar
+
 		content = Instance.new("Frame")
 		content.Name = "Content"
 		content.Size = UDim2.new(1, -16, 1, -72)
 		content.Position = UDim2.new(0, 8, 0, 68)
 		content.BackgroundTransparency = 1
 		content.Parent = main
+
 		top.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 				drag.on = true
@@ -381,6 +398,7 @@ do
 				drag.on = false
 			end
 		end)
+
 		local function addCornerResize(frame, minW, minH)
 			minW, minH = minW or 280, minH or 160
 			local function makeHandle(name, anchor, pos)
@@ -425,7 +443,7 @@ do
 					local nw = math.max(minW, startSize.X + d.X)
 					local nh = math.max(minH, startSize.Y + d.Y)
 					frame.Size = UDim2.new(0, nw, 0, nh)
-				else
+				else -- tl: move position and grow opposite
 					local nw = math.max(minW, startSize.X - d.X)
 					local nh = math.max(minH, startSize.Y - d.Y)
 					local usedX = startSize.X - nw
@@ -441,6 +459,7 @@ do
 			end)
 		end
 		addCornerResize(main, 300, 180)
+
 		local miniSg = Instance.new("ScreenGui")
 		miniSg.Name = "TCOMinimizeBtn_DISABLED"
 		miniSg.ResetOnSpawn = false
@@ -458,17 +477,20 @@ do
 		miniBtn.TextSize = 12
 		miniBtn.Parent = miniSg
 		corner(miniBtn, 8)
+
 		local function showMain(v)
 			main.Visible = v
 			miniSg.Enabled = not v
 		end
 		minBtn.MouseButton1Click:Connect(function() showMain(false) end)
 		miniBtn.MouseButton1Click:Connect(function() showMain(true) end)
+
 		closeBtn.MouseButton1Click:Connect(function()
 			if lib.ondestroyedfunc then pcall(lib.ondestroyedfunc) end
 			sg:Destroy()
 			miniSg:Destroy()
 		end)
+
 		libgui = {
 			Destroy = function()
 				if lib.ondestroyedfunc then pcall(lib.ondestroyedfunc) end
@@ -478,6 +500,7 @@ do
 		}
 		return libgui
 	end
+
 	local function switchTab(name)
 		currentTab = name
 		for n, t in pairs(tabs) do
@@ -491,6 +514,7 @@ do
 			end
 		end
 	end
+
 	local TAB_ORDER = {
 		["dashboard"] = 0,
 		["build and load stuff"] = 1,
@@ -513,6 +537,7 @@ do
 		["blame people lol"] = 18,
 		["settings"] = 99,
 	}
+
 	function lib.maketab(name)
 		name = tostring(name)
 		local order = TAB_ORDER[name] or (100 + #tabs)
@@ -527,6 +552,7 @@ do
 		btn.AutoButtonColor = true
 		btn.Parent = tabBar
 		corner(btn, 5)
+
 		local page = Instance.new("ScrollingFrame")
 		page.Size = UDim2.new(1, 0, 1, 0)
 		page.BackgroundTransparency = 1
@@ -536,20 +562,25 @@ do
 		page.CanvasSize = UDim2.new(0, 0, 0, 0)
 		page.Visible = false
 		page.Parent = content
+
 		local layout = Instance.new("UIListLayout")
 		layout.SortOrder = Enum.SortOrder.LayoutOrder
 		layout.Padding = UDim.new(0, 4)
 		layout.Parent = page
 		pad(page, 2, 8, 2, 4)
+
 		layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 			page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 12)
 		end)
+
 		tabs[name] = {btn = btn, page = page, layout = layout, order = order}
+
 		local tl = tabBar:FindFirstChildOfClass("UIListLayout")
 		if tl then
 			tl.SortOrder = Enum.SortOrder.LayoutOrder
 			tabBar.CanvasSize = UDim2.new(0, tl.AbsoluteContentSize.X + 16, 0, 0)
 		end
+
 		btn.MouseButton1Click:Connect(function()
 			playUiClick(0.45)
 			switchTab(name)
@@ -559,6 +590,7 @@ do
 		end
 		return name
 	end
+
 	local function rowFrame(parent)
 		local f = Instance.new("Frame")
 		f.Size = UDim2.new(1, -4, 0, 44)
@@ -569,6 +601,7 @@ do
 		corner(f, 6)
 		return f
 	end
+
 	function lib.getpage(tab)
 		return tabs[tab] and tabs[tab].page
 	end
@@ -586,6 +619,14 @@ do
 		l.Parent = page
 		return l
 	end
+
+	function lib.updatelabel(text, label)
+		if label and label:IsA("TextLabel") then
+			label.Text = tostring(text or "")
+		end
+		return label
+	end
+
 	function lib.makebutton(text, tab, cb)
 		local page = tabs[tab] and tabs[tab].page
 		if not page then return end
@@ -634,6 +675,7 @@ do
 		end)
 		return b
 	end
+
 	function lib.maketoggle(text, tab, cb, default)
 		local page = tabs[tab] and tabs[tab].page
 		if not page then return end
@@ -649,6 +691,7 @@ do
 		label.TextXAlignment = Enum.TextXAlignment.Left
 		label.Text = tostring(text or "Toggle")
 		label.Parent = f
+
 		local track = Instance.new("Frame")
 		track.Size = UDim2.new(0, 46, 0, 26)
 		track.Position = UDim2.new(1, -58, 0.5, -13)
@@ -656,6 +699,7 @@ do
 		track.BorderSizePixel = 0
 		track.Parent = f
 		corner(track, 13)
+
 		local knob = Instance.new("Frame")
 		knob.Size = UDim2.new(0, 22, 0, 22)
 		knob.Position = state and UDim2.new(1, -24, 0.5, -11) or UDim2.new(0, 2, 0.5, -11)
@@ -663,6 +707,7 @@ do
 		knob.BorderSizePixel = 0
 		knob.Parent = track
 		corner(knob, 11)
+
 		local hit = Instance.new("TextButton")
 		hit.Size = UDim2.new(1, 0, 1, 0)
 		hit.BackgroundTransparency = 1
@@ -693,6 +738,7 @@ do
 			knob.Position = state and UDim2.new(1, -24, 0.5, -11) or UDim2.new(0, 2, 0.5, -11)
 		end}
 	end
+
 	function lib.maketextbox(placeholder, tab, cb)
 		local page = tabs[tab] and tabs[tab].page
 		if not page then return end
@@ -717,6 +763,7 @@ do
 		end)
 		return box
 	end
+
 	function lib.makedropdown(text, tab, options, cb)
 		local page = tabs[tab] and tabs[tab].page
 		if not page then return end
@@ -725,6 +772,7 @@ do
 		local f = rowFrame(page)
 		f.Size = UDim2.new(1, -4, 0, 52)
 		f.ZIndex = 5
+
 		local keylessBanner = Instance.new("TextLabel")
 	keylessBanner.Size = UDim2.new(0.72, 0, 0, 28)
 	keylessBanner.Position = UDim2.new(0.06, 0, 0.095, 0)
@@ -759,6 +807,7 @@ do
 		title.TextXAlignment = Enum.TextXAlignment.Left
 		title.Text = tostring(text or "Select")
 		title.Parent = f
+
 		local btn = Instance.new("TextButton")
 		btn.Size = UDim2.new(0.5, -16, 0, 30)
 		btn.Position = UDim2.new(0.5, 0, 0.5, -15)
@@ -770,6 +819,7 @@ do
 		btn.TextTruncate = Enum.TextTruncate.AtEnd
 		btn.Parent = f
 		corner(btn, 8)
+
 		local open = false
 		local listFrame = Instance.new("ScrollingFrame")
 		listFrame.Size = UDim2.new(0.5, -16, 0, 0)
@@ -783,6 +833,7 @@ do
 		corner(listFrame, 6)
 		local listLayout = Instance.new("UIListLayout")
 		listLayout.Parent = listFrame
+
 		local function rebuild(opts)
 			options = opts or options
 			for _, c in pairs(listFrame:GetChildren()) do
@@ -813,6 +864,7 @@ do
 			listFrame.Size = UDim2.new(0.5, -16, 0, math.min(140, #options * 30 + 4))
 		end
 		rebuild(options)
+
 		btn.MouseButton1Click:Connect(function()
 			playUiClick(0.5)
 			open = not open
@@ -823,9 +875,11 @@ do
 				f.Size = UDim2.new(1, -4, 0, 52)
 			end
 		end)
+
 		local dd = {btn = btn, rebuild = rebuild, get = function() return selected end}
 		return dd
 	end
+
 	function lib.updatedropdown(dd, options)
 		if not dd then return end
 		if type(dd) == "table" and dd.rebuild then
@@ -835,8 +889,10 @@ do
 			end
 		end
 	end
+
 	lib.ondestroyedfunc = nil
 end
+
 getgenv()._guyHubThemes = {
 	Dark = {
 		BG = Color3.fromRGB(25, 27, 32), BG2 = Color3.fromRGB(40, 42, 50), BG3 = Color3.fromRGB(48, 50, 58),
@@ -902,6 +958,7 @@ getgenv()._guyHubThemes = {
 }
 getgenv()._guyHubTheme = getgenv()._guyHubThemes.Dark
 getgenv()._guyHubThemeName = "Dark"
+
 do
 	local skip = getgenv()._tcoSkipIntro and true or false
 	local mainOn = getgenv()._tcoLoadMain ~= false
@@ -918,12 +975,14 @@ do
 		if not sg.Parent then
 			sg.Parent = localplr:WaitForChild("PlayerGui")
 		end
+
 		local dim = Instance.new("Frame")
 		dim.Size = UDim2.new(1, 0, 1, 0)
 		dim.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 		dim.BackgroundTransparency = 0.35
 		dim.BorderSizePixel = 0
 		dim.Parent = sg
+
 		local f = Instance.new("Frame")
 		f.Size = UDim2.new(0, 280, 0, 220)
 		f.Position = UDim2.new(0.5, -140, 0.5, -110)
@@ -931,6 +990,7 @@ do
 		f.BorderSizePixel = 0
 		f.Parent = sg
 		Instance.new("UICorner", f).CornerRadius = UDim.new(0, 12)
+
 		local title = Instance.new("TextLabel")
 		title.Size = UDim2.new(1, -20, 0, 36)
 		title.Position = UDim2.new(0, 10, 0, 10)
@@ -940,6 +1000,7 @@ do
 		title.TextColor3 = Color3.fromRGB(240, 240, 245)
 		title.Text = "Nothing selected to load"
 		title.Parent = f
+
 		local sub = Instance.new("TextLabel")
 		sub.Size = UDim2.new(1, -20, 0, 28)
 		sub.Position = UDim2.new(0, 10, 0, 42)
@@ -949,6 +1010,7 @@ do
 		sub.TextColor3 = Color3.fromRGB(160, 160, 170)
 		sub.Text = "Pick one to continue"
 		sub.Parent = f
+
 		local function mk(text, y, key)
 			local b = Instance.new("TextButton")
 			b.Size = UDim2.new(1, -24, 0, 36)
@@ -968,10 +1030,12 @@ do
 		mk("Load Intro", 78, "intro")
 		mk("Load Main GUI", 120, "main")
 		mk("Load Commands", 162, "cmds")
+
 		while not chosen and sg.Parent do
 			task.wait()
 		end
 		pcall(function() sg:Destroy() end)
+
 		if chosen == "intro" then
 			getgenv()._tcoSkipIntro = false
 			getgenv()._tcoLoadMain = true
@@ -1001,6 +1065,7 @@ do
 		end
 	end
 end
+
 do
 	if getgenv()._tcoSkipIntro then
 	else
@@ -1008,6 +1073,7 @@ do
 	local TweenService = game:GetService("TweenService")
 	local SoundService = game:GetService("SoundService")
 	local introDone = false
+
 		local function playSound(id, vol, looped)
 		local s = Instance.new("Sound")
 		s.Name = "GuyHubSFX"
@@ -1037,12 +1103,13 @@ do
 		end
 		return s
 	end
-	local SFX_WHOOSH = 9113077334
+
+	local SFX_WHOOSH = 9113077334 -- Air Whoosh Heavy
 	local SFX_COIN = 13133749
 	local SFX_COIN_BIG = 12222225
 	local SFX_ERROR = 138081500
 	local SFX_CLICK = 6895079853
-	local SFX_MUSIC = 1841647093
+	local SFX_MUSIC = 1841647093 -- Life in an Elevator (relaxing lounge)
 local introSg = Instance.new("ScreenGui")
 	introSg.Name = "GuyHubIntro"
 	introSg.ResetOnSpawn = false
@@ -1052,30 +1119,35 @@ local introSg = Instance.new("ScreenGui")
 	if not introSg.Parent then
 		introSg.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 	end
+
 	local root = Instance.new("Frame")
 	root.Size = UDim2.new(1, 0, 1, 0)
 	root.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	root.BorderSizePixel = 0
 	root.Parent = introSg
+
 	local cover = Instance.new("Frame")
 	cover.AnchorPoint = Vector2.new(0.5, 0.5)
 	cover.Position = UDim2.new(0.5, 0, 0.5, 0)
-	cover.Size = UDim2.new(0.12, 0, 0.12, 0)
+	cover.Size = UDim2.new(0.12, 0, 0.12, 0) -- start small (far)
 	cover.BackgroundColor3 = Color3.fromRGB(12, 14, 18)
 	cover.BorderSizePixel = 0
 	cover.ClipsDescendants = true
 	cover.Parent = root
+
 	local sky = Instance.new("Frame")
 	sky.Size = UDim2.new(1, 0, 0.55, 0)
 	sky.BackgroundColor3 = Color3.fromRGB(120, 180, 230)
 	sky.BorderSizePixel = 0
 	sky.Parent = cover
+
 	local grass = Instance.new("Frame")
 	grass.Size = UDim2.new(1, 0, 0.5, 0)
 	grass.Position = UDim2.new(0, 0, 0.5, 0)
 	grass.BackgroundColor3 = Color3.fromRGB(55, 140, 55)
 	grass.BorderSizePixel = 0
 	grass.Parent = cover
+
 	local pad = Instance.new("Frame")
 	pad.AnchorPoint = Vector2.new(0.5, 0.5)
 	pad.Position = UDim2.new(0.55, 0, 0.58, 0)
@@ -1091,6 +1163,7 @@ local introSg = Instance.new("ScreenGui")
 	padInner.BorderSizePixel = 0
 	padInner.Parent = pad
 	Instance.new("UICorner", padInner).CornerRadius = UDim.new(0, 6)
+
 	task.spawn(function()
 		local a = 0
 		while introSg.Parent and not introDone do
@@ -1100,6 +1173,7 @@ local introSg = Instance.new("ScreenGui")
 			task.wait(0.03)
 		end
 	end)
+
 	local title = Instance.new("TextLabel")
 	title.Size = UDim2.new(0.5, 0, 0, 50)
 	title.Position = UDim2.new(0.06, 0, 0.18, 0)
@@ -1110,12 +1184,14 @@ local introSg = Instance.new("ScreenGui")
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Text = "guy hub tco"
 	title.Parent = cover
+
 	local menu = Instance.new("Frame")
 	menu.Size = UDim2.new(0, 220, 0, 198)
 	menu.Position = UDim2.new(0.06, 0, 0.36, 0)
 	menu.BackgroundTransparency = 1
 	menu.ZIndex = 10
 	menu.Parent = cover
+
 	local function menuBtn(txt, y)
 		local b = Instance.new("TextButton")
 		b.Size = UDim2.new(1, 0, 0, 32)
@@ -1137,11 +1213,14 @@ local introSg = Instance.new("ScreenGui")
 		end)
 		return b
 	end
+
 	local startBtn = menuBtn("Start", 0)
 	local chooseBtn = menuBtn("Choose GUI", 36)
 	local setBtn = menuBtn("Settings", 72)
 	local gamesBtn = menuBtn("Supported games", 108)
 	local creditsBtn = menuBtn("Credits", 144)
+
+
 	if getgenv()._tcoCfg then
 		getgenv()._tcoLoadMain = getgenv()._tcoCfg.loadMain ~= false
 		getgenv()._tcoLoadCmds = getgenv()._tcoCfg.loadCmds and true or false
@@ -1149,6 +1228,7 @@ local introSg = Instance.new("ScreenGui")
 		getgenv()._tcoLoadMain = true
 		getgenv()._tcoLoadCmds = false
 	end
+
 	local choosePanel = Instance.new("Frame")
 	choosePanel.Size = UDim2.new(0, 380, 0, 260)
 	choosePanel.Position = UDim2.new(0.5, -140, 0.5, -85)
@@ -1202,6 +1282,7 @@ local introSg = Instance.new("ScreenGui")
 		getgenv()._tcoCfg.loadCmds = v
 		if getgenv()._tcoSaveCfg then getgenv()._tcoSaveCfg() end
 	end)
+
 	local cBack = Instance.new("TextButton")
 	cBack.Size = UDim2.new(1, -20, 0, 32)
 	cBack.Position = UDim2.new(0, 10, 1, -42)
@@ -1217,10 +1298,12 @@ local introSg = Instance.new("ScreenGui")
 		if lib.playClick then lib.playClick(0.5) end
 		choosePanel.Visible = false
 	end)
+
 	playSound(SFX_WHOOSH, 1, false)
 	TweenService:Create(cover, TweenInfo.new(0.85, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = UDim2.new(1, 0, 1, 0)
 	}):Play()
+
 	local music = playSound(SFX_MUSIC, 0.45, true)
 	task.spawn(function()
 		task.wait(0.3)
@@ -1231,6 +1314,7 @@ local introSg = Instance.new("ScreenGui")
 			end
 		end)
 	end)
+
 	local setPanel = Instance.new("Frame")
 	setPanel.Size = UDim2.new(0, 320, 0, 280)
 	setPanel.Position = UDim2.new(0.5, -160, 0.5, -140)
@@ -1240,6 +1324,7 @@ local introSg = Instance.new("ScreenGui")
 	setPanel.ZIndex = 20
 	setPanel.Parent = cover
 	Instance.new("UICorner", setPanel).CornerRadius = UDim.new(0, 8)
+
 	local setTitle = Instance.new("TextLabel")
 	setTitle.Size = UDim2.new(1, -16, 0, 28)
 	setTitle.Position = UDim2.new(0, 8, 0, 6)
@@ -1251,6 +1336,7 @@ local introSg = Instance.new("ScreenGui")
 	setTitle.Text = "Settings"
 	setTitle.ZIndex = 21
 	setTitle.Parent = setPanel
+
 	local themeNames = {"Dark", "Blue", "Red", "Green", "Purple", "Orange", "Cyan", "Pink", "White", "Rainbow"}
 	local themeDrop = Instance.new("TextButton")
 	themeDrop.Size = UDim2.new(1, -16, 0, 34)
@@ -1263,6 +1349,7 @@ local introSg = Instance.new("ScreenGui")
 	themeDrop.ZIndex = 21
 	themeDrop.Parent = setPanel
 	Instance.new("UICorner", themeDrop).CornerRadius = UDim.new(0, 6)
+
 	local dropList = Instance.new("ScrollingFrame")
 	dropList.Size = UDim2.new(1, -16, 0, 0)
 	dropList.Position = UDim2.new(0, 8, 0, 80)
@@ -1304,6 +1391,7 @@ local introSg = Instance.new("ScreenGui")
 		end
 		playSound(SFX_CLICK, 0.35, false)
 	end)
+
 	local backBtn = Instance.new("TextButton")
 	backBtn.Size = UDim2.new(1, -16, 0, 34)
 	backBtn.Position = UDim2.new(0, 8, 1, -40)
@@ -1364,13 +1452,16 @@ local introSg = Instance.new("ScreenGui")
 		getgenv()._tcoCfg = getgenv()._tcoCfg or {}
 		getgenv()._tcoCfg.reloadOnExecute = v
 	end)
+
 	backBtn.MouseButton1Click:Connect(function()
 		setPanel.Visible = false
 		playSound(SFX_CLICK, 0.4, false)
 	end)
+
 	setBtn.MouseButton1Click:Connect(function()
 		setPanel.Visible = true
 	end)
+
 	local gamesPanel = Instance.new("Frame")
 	gamesPanel = gamesPanel
 	gamesPanel.Size = UDim2.new(0, 300, 0, 160)
@@ -1381,6 +1472,7 @@ local introSg = Instance.new("ScreenGui")
 	gamesPanel.ZIndex = 20
 	gamesPanel.Parent = cover
 	Instance.new("UICorner", gamesPanel).CornerRadius = UDim.new(0, 8)
+
 	local gTitle = Instance.new("TextLabel")
 	gTitle.Size = UDim2.new(1, -16, 0, 28)
 	gTitle.Position = UDim2.new(0, 8, 0, 8)
@@ -1392,6 +1484,7 @@ local introSg = Instance.new("ScreenGui")
 	gTitle.Text = "Supported games"
 	gTitle.ZIndex = 21
 	gTitle.Parent = gamesPanel
+
 	local gList = Instance.new("TextLabel")
 	gList.Size = UDim2.new(1, -16, 0, 50)
 	gList.Position = UDim2.new(0, 8, 0, 48)
@@ -1404,6 +1497,7 @@ local introSg = Instance.new("ScreenGui")
 	gList.Text = "• The Chosen One"
 	gList.ZIndex = 21
 	gList.Parent = gamesPanel
+
 	local gBack = Instance.new("TextButton")
 	gBack.Size = UDim2.new(1, -16, 0, 34)
 	gBack.Position = UDim2.new(0, 8, 1, -44)
@@ -1419,6 +1513,7 @@ local introSg = Instance.new("ScreenGui")
 		playSound(SFX_CLICK, 0.6, false)
 		gamesPanel.Visible = false
 	end)
+
 	local creditsPanel
 	gamesBtn.MouseButton1Click:Connect(function()
 		setPanel.Visible = false
@@ -1505,12 +1600,14 @@ local introSg = Instance.new("ScreenGui")
 		gamesPanel.Visible = false
 		creditsPanel.Visible = true
 	end)
+
 	chooseBtn.MouseButton1Click:Connect(function()
 		setPanel.Visible = false
 		gamesPanel.Visible = false
 		creditsPanel.Visible = false
 		choosePanel.Visible = true
 	end)
+
 	local function runLoadSequence()
 		playSound(SFX_CLICK, 0.75, false)
 		setPanel.Visible = false
@@ -1518,6 +1615,7 @@ local introSg = Instance.new("ScreenGui")
 		creditsPanel.Visible = false
 		menu.Visible = false
 		title.Visible = false
+
 		pcall(function()
 			if music then
 				music:Stop()
@@ -1525,18 +1623,21 @@ local introSg = Instance.new("ScreenGui")
 				music = nil
 			end
 		end)
+
 		pcall(function() sky.Visible = false end)
 		pcall(function() grass.Visible = false end)
 		pcall(function() pad.Visible = false end)
 		cover.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
 		root.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+
 		local laptop = Instance.new("Frame")
 		laptop.Name = "LaptopBG"
 		laptop.Size = UDim2.new(1, 0, 1, 0)
-		laptop.BackgroundColor3 = Color3.fromRGB(0, 99, 177)
+		laptop.BackgroundColor3 = Color3.fromRGB(0, 99, 177) -- classic Windows blue
 		laptop.BorderSizePixel = 0
 		laptop.ZIndex = 40
 		laptop.Parent = cover
+
 		local hill = Instance.new("Frame")
 		hill.Size = UDim2.new(1.2, 0, 0.35, 0)
 		hill.Position = UDim2.new(-0.1, 0, 0.55, 0)
@@ -1553,6 +1654,7 @@ local introSg = Instance.new("ScreenGui")
 		hill2.Rotation = 2
 		hill2.ZIndex = 41
 		hill2.Parent = cover
+
 		for i, name in ipairs({"This PC", "Recycle", "Folder", "Edge"}) do
 			local icon = Instance.new("Frame")
 			icon.Size = UDim2.new(0, 48, 0, 52)
@@ -1573,6 +1675,7 @@ local introSg = Instance.new("ScreenGui")
 			il.ZIndex = 43
 			il.Parent = icon
 		end
+
 		local win = Instance.new("Frame")
 		win.Size = UDim2.new(0.55, 0, 0.45, 0)
 		win.Position = UDim2.new(0.28, 0, 0.2, 0)
@@ -1598,6 +1701,7 @@ local introSg = Instance.new("ScreenGui")
 		winTitle.Text = "guy hub - Windows"
 		winTitle.ZIndex = 44
 		winTitle.Parent = winTop
+
 		local taskbar = Instance.new("Frame")
 		taskbar.Size = UDim2.new(1, 0, 0, 40)
 		taskbar.Position = UDim2.new(0, 0, 1, -40)
@@ -1627,6 +1731,7 @@ local introSg = Instance.new("ScreenGui")
 		clock.Text = os.date("%H:%M")
 		clock.ZIndex = 51
 		clock.Parent = taskbar
+
 		task.spawn(function()
 			for step = 1, 10 do
 				if not cover.Parent then break end
@@ -1658,6 +1763,7 @@ local introSg = Instance.new("ScreenGui")
 				task.wait(0.5)
 			end
 		end)
+
 		local t0 = tick()
 		local delay = 0.45
 		while tick() - t0 < 5 do
@@ -1680,10 +1786,12 @@ local introSg = Instance.new("ScreenGui")
 			task.wait(delay)
 			delay = math.max(0.05, delay * 0.78)
 		end
+
 		playSound(SFX_COIN_BIG, 1, false)
 		task.delay(0.15, function()
 			playSound(SFX_COIN, 0.8, false)
 		end)
+
 		local reward = Instance.new("Frame")
 		reward.AnchorPoint = Vector2.new(0.5, 0.5)
 		reward.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1693,6 +1801,7 @@ local introSg = Instance.new("ScreenGui")
 		reward.ZIndex = 70
 		reward.Parent = cover
 		Instance.new("UICorner", reward).CornerRadius = UDim.new(0, 12)
+
 		local rTitle = Instance.new("TextLabel")
 		rTitle.Size = UDim2.new(1, -20, 0, 70)
 		rTitle.Position = UDim2.new(0, 10, 0, 28)
@@ -1703,6 +1812,7 @@ local introSg = Instance.new("ScreenGui")
 		rTitle.Text = "you have obtained\nguy hub!"
 		rTitle.ZIndex = 71
 		rTitle.Parent = reward
+
 		local okBtn = Instance.new("TextButton")
 		okBtn.Size = UDim2.new(0, 120, 0, 40)
 		okBtn.Position = UDim2.new(0.5, -60, 1, -58)
@@ -1714,6 +1824,7 @@ local introSg = Instance.new("ScreenGui")
 		okBtn.ZIndex = 71
 		okBtn.Parent = reward
 		Instance.new("UICorner", okBtn).CornerRadius = UDim.new(0, 8)
+
 		task.spawn(function()
 			local rot = 0
 			local start = tick()
@@ -1732,6 +1843,7 @@ local introSg = Instance.new("ScreenGui")
 		TweenService:Create(reward, TweenInfo.new(0.95, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out), {
 			Size = UDim2.new(0, 280, 0, 190)
 		}):Play()
+
 		local clicked = false
 		okBtn.MouseButton1Click:Connect(function()
 			if clicked then return end
@@ -1754,16 +1866,21 @@ local introSg = Instance.new("ScreenGui")
 			introSg:Destroy()
 		end)
 	end
+
 	startBtn.MouseButton1Click:Connect(function()
 		task.spawn(runLoadSequence)
 	end)
+
 	while introSg.Parent and not introDone do
 		task.wait()
 	end
 	pcall(function() if introSg.Parent then introSg:Destroy() end end)
 	pcall(function() if music then music:Stop() music:Destroy() end end)
-	end
+	end -- skip intro else
 end
+
+
+
 if getgenv()._tcoLoadMain ~= false and not getgenv()._tcoSkipTCOBody then
 	libgui = lib.makelib("guy hub for tco")
 else
@@ -1779,6 +1896,7 @@ else
 	lib.updatelabel = function() end
 	print("[guy hub] Main GUI skipped")
 end
+
 pcall(function()
     if getgenv()._tcoTitleStatsConn and getgenv()._tcoTitleStatsConn.Disconnect then getgenv()._tcoTitleStatsConn:Disconnect() end
     local RunService = game:GetService("RunService")
@@ -1800,6 +1918,7 @@ pcall(function()
     end)
 end)
 getgenv()._tcoSkipIntro = getgenv()._tcoSkipIntro or false
+
 if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 	pcall(function()
 		for _, conn in ipairs(getgenv()._tcoCmdConnections or {}) do
@@ -1852,8 +1971,10 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
 			end)
 		end
+
 		local cmdStates = getgenv()._tcoCmdStates or {}
 		getgenv()._tcoCmdStates = cmdStates
+
 		local function runCmd(line)
 			line = tostring(line or ""):gsub("^%s+", ""):gsub("%s+$", "")
 			local pref = getgenv()._tcoPrefix or ":"
@@ -1866,6 +1987,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 			local cmd = args[1]:lower()
 			local a2, a3, a4 = args[2], args[3], args[4]
 			local rest = table.concat(args, " ", 2)
+
 			local function onOff(defaultOn)
 				if a2 and a2:lower() == "off" then return false end
 				if a2 and a2:lower() == "on" then return true end
@@ -1882,6 +2004,8 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 			local function hum()
 				return localplr.Character and localplr.Character:FindFirstChildOfClass("Humanoid")
 			end
+
+
 			if cmd == "whitelist" then
 				local p = findPlr(rest ~= "" and rest or a2)
 				if not p then notifyC("player not found") return end
@@ -1911,6 +2035,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				if n == 0 then notifyC("whitelist empty") end
 				return
 			end
+
 			if cmd == "prefix" then
 				local sg = Instance.new("ScreenGui")
 				sg.Name = "TCOPrefixGui"
@@ -1953,6 +2078,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end)
 				return
 			end
+
 			if cmd == "cmds" or cmd == "help" then
 				pcall(function()
 					local old = game.CoreGui:FindFirstChild("TCOCmdsList")
@@ -2060,6 +2186,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("cmds list opened")
 				return
 			end
+
 			local function cmdFindBuildFolder(name)
 				if typeof(findBuildFolder) == "function" then
 					return findBuildFolder(name)
@@ -2074,6 +2201,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return nil
 			end
+
 			local function cmdCollectOwnerParts(p)
 				local parts = {}
 				local folder = cmdFindBuildFolder(p.Name)
@@ -2104,6 +2232,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return parts
 			end
+
 			local function griefPlayer(p, maxSec)
 				if not p then return end
 				getgenv()._tcoGriefRun = getgenv()._tcoGriefRun or {}
@@ -2148,6 +2277,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 					notifyC("grief done " .. p.Name)
 				end)
 			end
+
 			if cmd == "grief" then
 				if a2 and a2:lower() == "off" then
 					getgenv()._tcoGriefRun = {}
@@ -2159,6 +2289,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				griefPlayer(p, nil)
 				return
 			end
+
 			if cmd == "minorgrief" then
 				local p = findPlr(a2)
 				local sec = tonumber(a3) or 5
@@ -2166,6 +2297,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				griefPlayer(p, sec)
 				return
 			end
+
 			if cmd == "disablebkit" or cmd == "blockbkit" then
 				if a2 and a2:lower() == "off" then
 					if getgenv()._tcoStopDisableBkit then getgenv()._tcoStopDisableBkit() end
@@ -2182,6 +2314,8 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return
 			end
+
+
 			if cmd == "fling" then
 				local p = findPlr(a2)
 				if not p or not p.Character then notifyC("no player") return end
@@ -2195,6 +2329,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("fling " .. p.Name .. " (return)")
 				return
 			end
+
 			if cmd == "flingloop" then
 				local st = S()
 				st.flingSel = onOff(true)
@@ -2221,6 +2356,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("flingloop " .. tostring(st.flingSel))
 				return
 			end
+
 			if cmd == "flingall" then
 				local loop = a2 and a2:lower() == "loop"
 				local st = S()
@@ -2266,6 +2402,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return
 			end
+
 			if cmd == "walkfling" then
 				local st = S()
 				st.walkFling = onOff(true)
@@ -2301,6 +2438,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("walkfling " .. tostring(st.walkFling))
 				return
 			end
+
 			if cmd == "tp" then
 				local p = findPlr(a2)
 				if p and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and hrp() then
@@ -2309,6 +2447,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				else notifyC("no player") end
 				return
 			end
+
 			if cmd == "view" then
 				local p = findPlr(a2)
 				if p and p.Character then
@@ -2318,12 +2457,14 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return
 			end
+
 			if cmd == "unview" then
 				local h = hum()
 				if h then workspace.CurrentCamera.CameraSubject = h end
 				notifyC("unview")
 				return
 			end
+
 			if cmd == "orbit" then
 				local st = S()
 				st.orbit = onOff(true)
@@ -2348,6 +2489,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("orbit " .. tostring(st.orbit))
 				return
 			end
+
 			if cmd == "spamtp" then
 				local st = S()
 				st.spamTP = onOff(true)
@@ -2368,6 +2510,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("spamtp " .. tostring(st.spamTP))
 				return
 			end
+
 			if cmd == "bubblechat" or cmd == "bubble" then
 				local st = S()
 				st.bubbleChat = onOff(true)
@@ -2391,6 +2534,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("bubblechat " .. tostring(st.bubbleChat))
 				return
 			end
+
 			if cmd == "freeze" or cmd == "reset" or cmd == "glitch" or cmd == "kill" or cmd == "blind" or cmd == "toxify" then
 				local p = findPlr(a2)
 				if not p then notifyC("no player") return end
@@ -2398,6 +2542,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC(cmd .. " " .. p.Name)
 				return
 			end
+
 			if cmd == "ws" or cmd == "walkspeed" or cmd == "speed" then
 				local n = tonumber(a2)
 				local st = S()
@@ -2413,6 +2558,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return
 			end
+
 			if cmd == "jp" or cmd == "jumppower" or cmd == "jump" then
 				local n = tonumber(a2)
 				local st = S()
@@ -2431,6 +2577,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				end
 				return
 			end
+
 			if cmd == "infjump" or cmd == "infinitejump" then
 				local st = S()
 				st.infJump = onOff(true)
@@ -2444,6 +2591,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("infjump " .. tostring(st.infJump))
 				return
 			end
+
 			if cmd == "fly" or cmd == "chosenfly" then
 				local st = S()
 				local want = onOff(true)
@@ -2508,21 +2656,25 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("fly on")
 				return
 			end
+
 			if cmd == "flyspeed" then
 				local n = tonumber(a2)
 				if n then S().flySpeed = n notifyC("flyspeed " .. n) end
 				return
 			end
+
 			if cmd == "arken" or cmd == "arkenstone" or cmd == "enlighten" then
 				local st = S()
 				st.enlightenBypass = onOff(true)
 				notifyC("arken bypass " .. tostring(st.enlightenBypass))
 				return
 			end
+
 			if cmd == "rejoin" then
 				pcall(function() game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, localplr) end)
 				return
 			end
+
 			if cmd == "serverhop" or cmd == "hop" then
 				task.spawn(function()
 					pcall(function()
@@ -2544,6 +2696,7 @@ if getgenv()._tcoLoadCmds and not getgenv()._tcoSkipTCOBody then
 				notifyC("serverhop")
 				return
 			end
+
 			if cmd == "jailaura" then
 				getgenv()._tcoJailAura = onOff(true)
 				if tonumber(a2) then getgenv()._tcoJailRange = tonumber(a2) end
@@ -2681,6 +2834,7 @@ if o and pa then pa("black", nil, o, getgenv()._tcoAuraRange or 35, "_tcoBlackAu
 				notifyC("blackaura " .. tostring(on))
 				return
 			end
+			-- generic paint aura cmds: :woodaura [player] [on/off]
 			local paintCmdMap = {
 				woodaura = "wood", iceaura = "ice", metalaura = "metal", glassaura = "glass",
 				forcefieldaura = "forcefield", ffaura = "forcefield", whiteaura = "plastic",
@@ -2694,7 +2848,7 @@ if o and pa then pa("black", nil, o, getgenv()._tcoAuraRange or 35, "_tcoBlackAu
 				local tgtArg = a2
 				if tgtArg and tgtArg:lower() ~= "on" and tgtArg:lower() ~= "off" and not tonumber(tgtArg) then
 					getgenv()._tcoCmdAuraTarget = tgtArg
-					on = onOff(true)
+					on = onOff(true) -- a3 may be off
 					if a3 and a3:lower() == "off" then on = false end
 				end
 				local flag = "_tcoCmdPaint_" .. mode
@@ -2955,6 +3109,7 @@ if o and pa then pa("black", nil, o, getgenv()._tcoAuraRange or 35, "_tcoBlackAu
 				elseif typeof(getgenv().tcoPhantomCast) == "function" then getgenv().tcoPhantomCast("domain") end
 				return
 			end
+			
 			if cmd == "joinhi" then
 				getgenv()._tcoCfg = getgenv()._tcoCfg or {}
 				local st = onOff(true)
@@ -2996,6 +3151,7 @@ if o and pa then pa("black", nil, o, getgenv()._tcoAuraRange or 35, "_tcoBlackAu
 				end
 				return
 			end
+
 			if cmd == "aurasettings" then
 				pcall(function()
 					local old = game.CoreGui:FindFirstChild("TCOAuraSettings") or (localplr.PlayerGui and localplr.PlayerGui:FindFirstChild("TCOAuraSettings"))
@@ -3101,6 +3257,7 @@ if cmd == "aurarange" then
 				if n then getgenv()._tcoAuraRange = n notifyC("aurarange "..n) end
 				return
 			end
+
 			local antiMap = {
 				antitoxify = "antiToxify", antiblind = "antiBlind", antiglitch = "antiGlitch",
 				antifreeze = "antiFreeze", antijail = "antiJail", antistun = "antiStun",
@@ -3121,6 +3278,7 @@ if cmd == "aurarange" then
 				notifyC("spamr6 " .. tostring(getgenv()._tcoAnti.spamR6))
 				return
 			end
+
 			if cmd == "equipall" then
 				pcall(function()
 					local char = localplr.Character
@@ -3169,6 +3327,7 @@ if cmd == "aurarange" then
 				notifyC("autodrop " .. tostring(getgenv()._tcoAutoDrop))
 				return
 			end
+
 			if cmd == "say" or cmd == "chat" then
 				if rest ~= "" then chat(rest) end
 				return
@@ -3197,6 +3356,7 @@ if cmd == "aurarange" then
 				notifyC("hide chat prefix " .. tostring(getgenv()._tcoHideChat) .. " — spam/cmds add ; when ON")
 				return
 			end
+
 			if cmd == "spamblocks" or cmd == "spamblock" then
 				local on = onOff(true)
 				pcall(function() spmbl = on end)
@@ -3227,6 +3387,7 @@ if cmd == "aurarange" then
 				notifyC("spamblocks " .. tostring(on))
 				return
 			end
+
 			if cmd == "spamsigns" or cmd == "spamsign" then
 				local on = onOff(true)
 				pcall(function() spmsi = on end)
@@ -3256,10 +3417,12 @@ if cmd == "aurarange" then
 				notifyC("spamsigns " .. tostring(on))
 				return
 			end
+
 			if cmd == "toxify" and a2 then
 				local p = findPlr(a2)
 				if p then chat("toxify " .. p.Name) notifyC("toxify " .. p.Name) return end
 			end
+
 			if cmd == "gearme" then
 				local id = a2 or ""
 				if id ~= "" then chat("gear me " .. id) notifyC("gear me " .. id) end
@@ -3280,6 +3443,7 @@ if cmd == "aurarange" then
 				end
 				return
 			end
+
 			if cmd == "autopickup" or cmd == "pickup" then
 				local on = onOff(true)
 				pcall(function() pickuptools = on end)
@@ -3295,6 +3459,7 @@ if cmd == "aurarange" then
 				notifyC("spamequiptools " .. tostring(on))
 				return
 			end
+
 			if cmd == "griefdetect" or cmd == "detectdelete" then
 				pcall(function()
 					if typeof(detectDelete) == "function" then detectDelete() end
@@ -3326,6 +3491,7 @@ if cmd == "aurarange" then
 				notifyC("whitelist - use grief detection tab")
 				return
 			end
+
 			if cmd == "spychat" then
 				local on = onOff(true)
 				pcall(function() spychat = on end)
@@ -3343,6 +3509,7 @@ if cmd == "aurarange" then
 				end)
 				return
 			end
+
 			if cmd == "loadanti" or cmd == "antigui" then
 				pcall(function()
 					if typeof(loadAntiGui) == "function" then loadAntiGui() notifyC("anti gui loaded")
@@ -3350,6 +3517,7 @@ if cmd == "aurarange" then
 				end)
 				return
 			end
+
 			if cmd == "loadspam" or cmd == "dualspam" then
 				pcall(function()
 					if typeof(loadDualSpamGui) == "function" then loadDualSpamGui() notifyC("2 cmd spam gui")
@@ -3357,6 +3525,7 @@ if cmd == "aurarange" then
 				end)
 				return
 			end
+
 			if cmd == "goto" then
 				local p = findPlr(a2)
 				if p and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and hrp() then
@@ -3365,21 +3534,25 @@ if cmd == "aurarange" then
 				else notifyC("no player") end
 				return
 			end
+
 			if cmd == "bring" then
 				local p = findPlr(a2)
 				if p then chat("bring " .. p.Name) notifyC("bring " .. p.Name) end
 				return
 			end
+
 			if cmd == "jail" then
 				local p = findPlr(a2)
 				if p then chat("jail " .. p.Name) notifyC("jail " .. p.Name) end
 				return
 			end
+
 			if cmd == "unjail" then
 				local p = findPlr(a2)
 				if p then chat("unjail " .. p.Name) notifyC("unjail " .. p.Name) end
 				return
 			end
+
 			if cmd == "admin" or cmd == "flingadmin" then
 				task.spawn(function()
 					local found = 0
@@ -3404,6 +3577,7 @@ if cmd == "aurarange" then
 				end)
 				return
 			end
+
 			if cmd == "tpadmin" then
 				for _, p in pairs(game.Players:GetPlayers()) do
 					if p ~= localplr and p.Neutral == false and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and hrp() then
@@ -3415,6 +3589,7 @@ if cmd == "aurarange" then
 				notifyC("no admin")
 				return
 			end
+
 			if cmd == "esp" then
 				local on = onOff(true)
 				if typeof(getgenv()._tcoSetESP) == "function" then
@@ -3452,11 +3627,13 @@ if cmd == "aurarange" then
 				notifyC("esp " .. tostring(on))
 				return
 			end
+
 			if cmd == "spamdelay" then
 				local n = tonumber(a2)
 				if n then getgenv()._tcoSpamDelay = n notifyC("spamdelay " .. n) end
 				return
 			end
+
 			if cmd == "mainui" or cmd == "gui" then
 				pcall(function()
 					local sg = game.CoreGui:FindFirstChild("TCOSettingsUI")
@@ -3464,6 +3641,7 @@ if cmd == "aurarange" then
 				end)
 				return
 			end
+
 			if cmd == "noclip" then
 				getgenv()._tcoNoclip = onOff(true)
 				if getgenv()._tcoNoclip then
@@ -3484,14 +3662,17 @@ if cmd == "aurarange" then
 				notifyC("noclip " .. tostring(getgenv()._tcoNoclip))
 				return
 			end
+
 			notifyC("unknown: " .. cmd .. " (type cmds)")
 		end
+
 		local csg = Instance.new("ScreenGui")
 		csg.Name = "TCOCmdGui"
 		csg.ResetOnSpawn = false
 		csg.DisplayOrder = 150
 		pcall(function() csg.Parent = game.CoreGui end)
 		if not csg.Parent then csg.Parent = localplr:WaitForChild("PlayerGui") end
+
 		local mainF = Instance.new("Frame")
 		mainF.Name = "CmdMain"
 		mainF.Size = UDim2.new(0, 340, 0, 160)
@@ -3549,6 +3730,7 @@ if cmd == "aurarange" then
 				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then resizing = false end
 			end)
 		end
+
 		local top = Instance.new("Frame")
 		top.Size = UDim2.new(1, 0, 0, 32)
 		top.BackgroundColor3 = Color3.fromRGB(36, 38, 46)
@@ -3561,6 +3743,7 @@ if cmd == "aurarange" then
 		topFix.BackgroundColor3 = Color3.fromRGB(36, 38, 46)
 		topFix.BorderSizePixel = 0
 		topFix.Parent = top
+
 		local title = Instance.new("TextLabel")
 		title.Size = UDim2.new(1, -80, 1, 0)
 		title.Position = UDim2.new(0, 12, 0, 0)
@@ -3571,6 +3754,7 @@ if cmd == "aurarange" then
 		title.TextXAlignment = Enum.TextXAlignment.Left
 		title.Text = "guy hub commands"
 		title.Parent = top
+
 		local minBtn = Instance.new("TextButton")
 		minBtn.Size = UDim2.new(0, 28, 0, 24)
 		minBtn.Position = UDim2.new(1, -64, 0.5, -12)
@@ -3581,6 +3765,7 @@ if cmd == "aurarange" then
 		minBtn.TextSize = 16
 		minBtn.Parent = top
 		Instance.new("UICorner", minBtn).CornerRadius = UDim.new(0, 6)
+
 		local closeBtn = Instance.new("TextButton")
 		closeBtn.Size = UDim2.new(0, 28, 0, 24)
 		closeBtn.Position = UDim2.new(1, -32, 0.5, -12)
@@ -3591,6 +3776,7 @@ if cmd == "aurarange" then
 		closeBtn.TextSize = 14
 		closeBtn.Parent = top
 		Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 6)
+
 		local hint = Instance.new("TextLabel")
 		hint.Size = UDim2.new(1, -16, 0, 36)
 		hint.Position = UDim2.new(0, 8, 0, 38)
@@ -3602,6 +3788,7 @@ if cmd == "aurarange" then
 		hint.TextWrapped = true
 		hint.Text = "Prefix chat or type below. :cmds for list. Works without main GUI."
 		hint.Parent = mainF
+
 		local input = Instance.new("TextBox")
 		input.Size = UDim2.new(1, -16, 0, 36)
 		input.Position = UDim2.new(0, 8, 0, 80)
@@ -3614,6 +3801,7 @@ if cmd == "aurarange" then
 		input.ClearTextOnFocus = false
 		input.Parent = mainF
 		Instance.new("UICorner", input).CornerRadius = UDim.new(0, 8)
+
 		local runBtn = Instance.new("TextButton")
 		runBtn.Size = UDim2.new(1, -16, 0, 30)
 		runBtn.Position = UDim2.new(0, 8, 0, 122)
@@ -3624,6 +3812,7 @@ if cmd == "aurarange" then
 		runBtn.TextSize = 14
 		runBtn.Parent = mainF
 		Instance.new("UICorner", runBtn).CornerRadius = UDim.new(0, 6)
+
 		local function doRun()
 			runCmd(input.Text)
 			input.Text = ""
@@ -3633,6 +3822,7 @@ if cmd == "aurarange" then
 		input.FocusLost:Connect(function(enter)
 			if enter then doRun() end
 		end)
+
 		local dragging, d0, p0 = false, nil, nil
 		top.InputBegan:Connect(function(inp)
 			if inp.UserInputType == Enum.UserInputType.MouseButton1 or inp.UserInputType == Enum.UserInputType.Touch then
@@ -3652,6 +3842,7 @@ if cmd == "aurarange" then
 				dragging = false
 			end
 		end)
+
 		local miniSg = Instance.new("ScreenGui")
 		miniSg.Name = "TCOCmdMini"
 		miniSg.ResetOnSpawn = false
@@ -3669,6 +3860,7 @@ if cmd == "aurarange" then
 		miniBtn.TextSize = 20
 		miniBtn.Parent = miniSg
 		Instance.new("UICorner", miniBtn).CornerRadius = UDim.new(1, 0)
+
 		minBtn.MouseButton1Click:Connect(function()
 			mainF.Visible = false
 			miniSg.Enabled = true
@@ -3686,7 +3878,9 @@ if cmd == "aurarange" then
 			miniSg:Destroy()
 			getgenv()._tcoLoadCmds = false
 		end)
+
 		notifyC("Commands GUI ready - prefix " .. (getgenv()._tcoPrefix or ":"))
+
 		local cmdConnections = getgenv()._tcoCmdConnections or {}
 		getgenv()._tcoCmdConnections = cmdConnections
 		local lastChatCommand, lastChatCommandAt = nil, 0
@@ -3713,6 +3907,8 @@ if cmd == "aurarange" then
 		end)
 	end)
 end
+
+
 getgenv()._tcoWhitelist = getgenv()._tcoWhitelist or {}
 getgenv()._tcoStand = getgenv()._tcoStand or {
 	userId = nil,
@@ -3724,6 +3920,8 @@ getgenv()._tcoStand = getgenv()._tcoStand or {
 	barrage = false,
 	barrageFling = false,
 }
+
+
 task.spawn(function()
 	while true do
 		task.wait(0.4)
@@ -3743,7 +3941,10 @@ task.spawn(function()
 		end)
 	end
 end)
+
 Players = game:GetService("Players")
+
+
 getgenv()._tcoCloseMiniGames = function()
 	pcall(function()
 		for _, parent in ipairs({game.CoreGui, game.Players.LocalPlayer:FindFirstChild("PlayerGui")}) do
@@ -3759,6 +3960,7 @@ getgenv()._tcoCloseMiniGames = function()
 		end
 	end)
 end
+
 getgenv()._tcoOpenMiniGames = function()
 	getgenv()._tcoCloseMiniGames()
 	local CoreGui = game:GetService("CoreGui")
@@ -3772,6 +3974,7 @@ getgenv()._tcoOpenMiniGames = function()
 	sg.IgnoreGuiInset = true
 	pcall(function() sg.Parent = CoreGui end)
 	if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
+
 	local function playSfx(id, vol)
 		task.spawn(function()
 			pcall(function()
@@ -3794,6 +3997,7 @@ getgenv()._tcoOpenMiniGames = function()
 		music.Parent = SoundService
 		music:Play()
 	end)
+
 	local handle = Instance.new("TextButton")
 	handle.Size = UDim2.new(0, 44, 0, 44)
 	handle.Position = UDim2.new(0, 10, 0.55, 0)
@@ -3805,6 +4009,7 @@ getgenv()._tcoOpenMiniGames = function()
 	handle.ZIndex = 10
 	handle.Parent = sg
 	Instance.new("UICorner", handle).CornerRadius = UDim.new(0, 10)
+
 	local panel = Instance.new("Frame")
 	panel.Size = UDim2.new(0, 300, 0, 340)
 	panel.Position = UDim2.new(0, 66, 0.55, -170)
@@ -3812,6 +4017,7 @@ getgenv()._tcoOpenMiniGames = function()
 	panel.ZIndex = 5
 	panel.Parent = sg
 	Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 8)
+
 	local top = Instance.new("TextButton")
 	top.Size = UDim2.new(1, 0, 0, 30)
 	top.BackgroundColor3 = Color3.fromRGB(31, 39, 52)
@@ -3823,6 +4029,7 @@ getgenv()._tcoOpenMiniGames = function()
 	top.ZIndex = 6
 	top.Parent = panel
 	Instance.new("UICorner", top).CornerRadius = UDim.new(0, 8)
+
 	local closeBtn = Instance.new("TextButton")
 	closeBtn.Size = UDim2.new(0, 26, 0, 26)
 	closeBtn.Position = UDim2.new(1, -28, 0, 2)
@@ -3833,6 +4040,7 @@ getgenv()._tcoOpenMiniGames = function()
 	closeBtn.ZIndex = 7
 	closeBtn.Parent = top
 	Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 5)
+
 	local list = Instance.new("ScrollingFrame")
 	list.Size = UDim2.new(1, -14, 1, -44)
 	list.Position = UDim2.new(0, 7, 0, 38)
@@ -3842,6 +4050,7 @@ getgenv()._tcoOpenMiniGames = function()
 	list.ZIndex = 6
 	list.Parent = panel
 	Instance.new("UIListLayout", list).Padding = UDim.new(0, 4)
+
 	local play = Instance.new("Frame")
 	play.Size = UDim2.new(1, -14, 1, -44)
 	play.Position = UDim2.new(0, 7, 0, 38)
@@ -3851,6 +4060,7 @@ getgenv()._tcoOpenMiniGames = function()
 	play.ClipsDescendants = true
 	play.Parent = panel
 	Instance.new("UICorner", play).CornerRadius = UDim.new(0, 6)
+
 	local gTitle = Instance.new("TextLabel")
 	gTitle.Size = UDim2.new(1, -8, 0, 22)
 	gTitle.Position = UDim2.new(0, 4, 0, 2)
@@ -3861,6 +4071,7 @@ getgenv()._tcoOpenMiniGames = function()
 	gTitle.TextXAlignment = Enum.TextXAlignment.Left
 	gTitle.ZIndex = 7
 	gTitle.Parent = play
+
 	local scoreL = Instance.new("TextLabel")
 	scoreL.Size = UDim2.new(1, -8, 0, 18)
 	scoreL.Position = UDim2.new(0, 4, 0, 22)
@@ -3872,6 +4083,7 @@ getgenv()._tcoOpenMiniGames = function()
 	scoreL.TextXAlignment = Enum.TextXAlignment.Left
 	scoreL.ZIndex = 7
 	scoreL.Parent = play
+
 	local field = Instance.new("Frame")
 	field.Size = UDim2.new(1, -8, 1, -78)
 	field.Position = UDim2.new(0, 4, 0, 42)
@@ -3880,12 +4092,14 @@ getgenv()._tcoOpenMiniGames = function()
 	field.ZIndex = 7
 	field.Parent = play
 	Instance.new("UICorner", field).CornerRadius = UDim.new(0, 4)
+
 	local btnRow = Instance.new("Frame")
 	btnRow.Size = UDim2.new(1, -8, 0, 28)
 	btnRow.Position = UDim2.new(0, 4, 1, -32)
 	btnRow.BackgroundTransparency = 1
 	btnRow.ZIndex = 7
 	btnRow.Parent = play
+
 	local backBtn = Instance.new("TextButton")
 	backBtn.Size = UDim2.new(0.48, -2, 1, 0)
 	backBtn.BackgroundColor3 = Color3.fromRGB(50, 52, 60)
@@ -3896,6 +4110,7 @@ getgenv()._tcoOpenMiniGames = function()
 	backBtn.ZIndex = 8
 	backBtn.Parent = btnRow
 	Instance.new("UICorner", backBtn).CornerRadius = UDim.new(0, 5)
+
 	local resetBtn = Instance.new("TextButton")
 	resetBtn.Size = UDim2.new(0.48, -2, 1, 0)
 	resetBtn.Position = UDim2.new(0.52, 0, 0, 0)
@@ -3907,6 +4122,7 @@ getgenv()._tcoOpenMiniGames = function()
 	resetBtn.ZIndex = 8
 	resetBtn.Parent = btnRow
 	Instance.new("UICorner", resetBtn).CornerRadius = UDim.new(0, 5)
+
 	local function makeDrag(guiObj, moveTarget)
 		moveTarget = moveTarget or guiObj
 		local dragging, startIn, startPos
@@ -3932,9 +4148,11 @@ getgenv()._tcoOpenMiniGames = function()
 	end
 	makeDrag(top, panel)
 	makeDrag(handle, handle)
+
 	local gen = 0
 	local score = 0
 	local currentStart = nil
+
 	local function clearField()
 		for _, ch in pairs(field:GetChildren()) do
 			if not ch:IsA("UICorner") then ch:Destroy() end
@@ -3952,6 +4170,7 @@ getgenv()._tcoOpenMiniGames = function()
 		gTitle.Text = msg or "You died - Restart"
 		playSfx(138081500, 0.55)
 	end
+
 	local function startFruit()
 		local my = gen + 1
 		gen = my
@@ -4001,6 +4220,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startFlappy()
 		local my = gen + 1
 		gen = my
@@ -4021,7 +4241,7 @@ getgenv()._tcoOpenMiniGames = function()
 		local pipes = {}
 		local function flap()
 			if dead or gen ~= my then return end
-			vy = -3.2
+			vy = -3.2 -- gentle flap
 			playSfx(6895079853, 0.28)
 		end
 		field.InputBegan:Connect(function(inp)
@@ -4099,6 +4319,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startReaction()
 		local my = gen + 1
 		gen = my
@@ -4131,6 +4352,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startMemory()
 		local my = gen + 1
 		gen = my
@@ -4187,6 +4409,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end)
 		end
 	end
+
 	local function startDodge()
 		local my = gen + 1
 		gen = my
@@ -4261,6 +4484,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startCatch()
 		local my = gen + 1
 		gen = my
@@ -4319,6 +4543,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startWhack()
 		local my = gen + 1
 		gen = my
@@ -4365,6 +4590,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startRhythm()
 		local my = gen + 1
 		gen = my
@@ -4420,6 +4646,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startAim()
 		local my = gen + 1
 		gen = my
@@ -4456,6 +4683,7 @@ getgenv()._tcoOpenMiniGames = function()
 		end
 		spawnTarget()
 	end
+
 	local function startStack()
 		local my = gen + 1
 		gen = my
@@ -4506,6 +4734,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	local function startColorTap()
 		local my = gen + 1
 		gen = my
@@ -4563,6 +4792,7 @@ getgenv()._tcoOpenMiniGames = function()
 		end
 		nextRound()
 	end
+
 	local function startBubble()
 		local my = gen + 1
 		gen = my
@@ -4595,6 +4825,7 @@ getgenv()._tcoOpenMiniGames = function()
 			end
 		end)
 	end
+
 	currentStart = startFruit
 	local games = {
 		{"01  🍎  FRUIT RUN", startFruit},
@@ -4629,6 +4860,7 @@ getgenv()._tcoOpenMiniGames = function()
 			g[2]()
 		end)
 	end
+
 	backBtn.MouseButton1Click:Connect(function()
 		gen = gen + 1
 		clearField()
@@ -4651,6 +4883,8 @@ getgenv()._tcoOpenMiniGames = function()
 		panel.Visible = shown
 	end)
 end
+
+
 dashtab = lib.maketab("dashboard")
 bsaltab = lib.maketab("build and load stuff")
 esptab = lib.maketab("esp")
@@ -4666,7 +4900,7 @@ commandtab = antitab
 loadDualSpamGui = nil
 jailtab = lib.maketab("jail")
 grieftab = lib.maketab("grief")
-emotestab = lib.maketab("emotes")
+-- ========== DASHBOARD ==========
 do
     local Players = game:GetService("Players")
     local dashPage = lib.getpage(dashtab)
@@ -4761,6 +4995,8 @@ do
         end)
     end
 end
+
+-- ========== CONFIGURABLE PLAYER ESP ==========
 do
     local Players = game:GetService("Players")
     local RunService = game:GetService("RunService")
@@ -4791,6 +5027,7 @@ do
         return false
     end
     local function isChosenOneAdmin(plr)
+        -- The Chosen One marks admins with Neutral == false.
         if plr.Neutral == false then return true end
         if plr:GetAttribute("ChosenOneAdmin") == true then return true end
         return false
@@ -4863,6 +5100,7 @@ do
     end)
     lib.makebutton("Clear ESP now",esptab,clearAll)
 end
+
 do
 	local ptab = lib.maketab("player stuff")
 	local shaderState = getgenv()._tcoShaderState or {fps=false}
@@ -4992,7 +5230,7 @@ do
 			if not name or name == "" then return end
 			if name ~= "others" then
 				local p = game.Players:FindFirstChild(name)
-				if p == localplr then return end
+				if p == localplr then return end -- never abuse yourself
 				if not p then
 					for _, pl in pairs(game.Players:GetPlayers()) do
 						if pl.Name:lower() == name:lower() or pl.DisplayName:lower() == name:lower() then
@@ -5036,17 +5274,17 @@ do
 			end
 			local gen = (getgenv()._tcoEnlightLoopGen or 0) + 1
 			getgenv()._tcoEnlightLoopGen = gen
-			local abusedChar = {}
+			local abusedChar = {} -- [player] = character instance last abused
 			local function hookPlayer(p)
 				if not p or p == localplr then return end
 				pcall(function()
 					if p.Character then
-						abusedChar[p] = nil
+						abusedChar[p] = nil -- force abuse current if loop just turned on
 					end
 					table.insert(getgenv()._tcoEnlightCharConns or {}, p.CharacterAdded:Connect(function(char)
 						if not getgenv()._tcoEnlightLoopAbuse or getgenv()._tcoEnlightLoopGen ~= gen then return end
 						task.spawn(function()
-							task.wait(1.2)
+							task.wait(1.2) -- fully respawn
 							if not getgenv()._tcoEnlightLoopAbuse or getgenv()._tcoEnlightLoopGen ~= gen then return end
 							if not char or not char.Parent then return end
 							local hum = char:FindFirstChildOfClass("Humanoid")
@@ -5062,6 +5300,7 @@ do
 			end
 			getgenv()._tcoEnlightCharConns = {}
 			task.spawn(function()
+				-- initial abuse + hooks
 				local names = abuseNames()
 				for _, name in ipairs(names) do
 					if name == "others" then
@@ -5098,6 +5337,7 @@ do
 						end
 					end
 				end
+				-- watch joins
 				local joinConn = game.Players.PlayerAdded:Connect(function(p)
 					if not getgenv()._tcoEnlightLoopAbuse or getgenv()._tcoEnlightLoopGen ~= gen then return end
 					if p == localplr then return end
@@ -5163,6 +5403,7 @@ do
 				getgenv()._tcoEnlightDrag = false
 				return
 			end
+			-- order: invisible me FIRST, then mute me, mute target, speed 0 — 1.5s between each
 			task.spawn(function()
 				enlightSay(";invisible me")
 				task.wait(1.5)
@@ -5268,163 +5509,9 @@ do
 	end
 	local flingtab = lib.maketab("fling")
 	local animtab = lib.maketab("animations")
-	do
-		local UIS = game:GetService("UserInputService")
-		local HttpService = game:GetService("HttpService")
-		local emoteCatalogUrl = "https://raw.githubusercontent.com/7yd7/sniper-Emote/refs/heads/test/EmoteSniper.json"
-		local emoteState = {
-			gui = nil, page = nil, speedPage = nil, settingsPage = nil,
-			search = "", pageNo = 1, pageSize = 40, data = {}, filtered = {},
-			track = nil, speed = 1, loop = true, freeze = false,
-			stopPrevious = true, stopOnRespawn = true, showIds = false,
-			favoritesOnly = false, favorites = {}, connections = {}, minimized = false,
-			settingsFile = "tco_emote_settings.json"
-		}
-		local fallbackEmotes = {
-			{id=3360686498,name="Stadium"},{id=3360692915,name="Tilt"},
-			{id=3576968026,name="Shrug"},{id=3360689775,name="Salute"}
-		}
-		local function notifyEmote(text)
-			pcall(function() game:GetService("StarterGui"):SetCore("SendNotification", {Title="Guy Hub • Emotes",Text=tostring(text),Duration=3}) end)
-		end
-		local function loadEmoteSettings()
-			local decoded
-			pcall(function()
-				if isfile and isfile(emoteState.settingsFile) then decoded=HttpService:JSONDecode(readfile(emoteState.settingsFile)) end
-			end)
-			if type(decoded) == "table" then
-				emoteState.speed = math.clamp(tonumber(decoded.speed) or 1, 0, 5)
-				emoteState.loop = decoded.loop ~= false
-				emoteState.stopPrevious = decoded.stopPrevious ~= false
-				emoteState.stopOnRespawn = decoded.stopOnRespawn ~= false
-				emoteState.showIds = decoded.showIds == true
-				emoteState.favoritesOnly = decoded.favoritesOnly == true
-				emoteState.favorites = type(decoded.favorites)=="table" and decoded.favorites or {}
-			end
-		end
-		local function saveEmoteSettings()
-			pcall(function()
-				if writefile then writefile(emoteState.settingsFile, HttpService:JSONEncode({speed=emoteState.speed,loop=emoteState.loop,stopPrevious=emoteState.stopPrevious,stopOnRespawn=emoteState.stopOnRespawn,showIds=emoteState.showIds,favoritesOnly=emoteState.favoritesOnly,favorites=emoteState.favorites})) end
-			end)
-		end
-		local function stopEmote()
-			if emoteState.track then pcall(function() emoteState.track:Stop(0.12) end) end
-			emoteState.track=nil
-			if emoteState.stopPrevious then
-				local c=localplr.Character; local h=c and c:FindFirstChildOfClass("Humanoid")
-				if h then pcall(function() for _,t in ipairs(h:GetPlayingAnimationTracks()) do t:Stop(0.12) end end) end
-			end
-		end
-		local function getHumanoid()
-			local c=localplr.Character; return c and c:FindFirstChildOfClass("Humanoid")
-		end
-		local function playEmote(item)
-			local h=getHumanoid(); if not h then notifyEmote("R15 character not ready") return end
-			if h.RigType ~= Enum.HumanoidRigType.R15 then notifyEmote("This emote browser supports R15 only") return end
-			if emoteState.stopPrevious then stopEmote() end
-			local track
-			local ok=pcall(function() track=h:PlayEmoteAndGetAnimTrackById(tonumber(item.id)) end)
-			if not track then
-				local a=Instance.new("Animation"); a.AnimationId="rbxassetid://"..tostring(item.id)
-				local animator=h:FindFirstChildOfClass("Animator") or Instance.new("Animator",h)
-				ok,track=pcall(function() return animator:LoadAnimation(a) end)
-			end
-			if not ok or not track then notifyEmote("Could not load "..tostring(item.name)); return end
-			emoteState.track=track
-			track.Priority=Enum.AnimationPriority.Action
-			track.Looped=emoteState.loop
-			track:Play(0.12)
-			track:AdjustSpeed(emoteState.freeze and 0 or emoteState.speed)
-			notifyEmote("Playing "..tostring(item.name))
-		end
-		local function make(class, props, parent)
-			local o=Instance.new(class); for k,v in pairs(props or {}) do o[k]=v end; o.Parent=parent; return o
-		end
-		local function styleButton(b, accent)
-			b.BackgroundColor3=accent and Color3.fromRGB(70,92,150) or Color3.fromRGB(44,48,62); b.TextColor3=Color3.fromRGB(235,240,255); b.Font=Enum.Font.GothamSemibold; b.TextSize=12; make("UICorner",{CornerRadius=UDim.new(0,6)},b)
-		end
-		local function clearConnections()
-			for _,c in ipairs(emoteState.connections) do pcall(function() c:Disconnect() end) end; emoteState.connections={}
-		end
-		local function filterData()
-			emoteState.filtered={}; local q=emoteState.search:lower()
-			for _,item in ipairs(emoteState.data) do
-				local match=q=="" or tostring(item.name):lower():find(q,1,true) or tostring(item.id):find(q,1,true)
-				local fav=emoteState.favorites[tostring(item.id)]==true
-				if match and (not emoteState.favoritesOnly or fav) then table.insert(emoteState.filtered,item) end
-			end
-			emoteState.pageNo=math.max(1,math.min(emoteState.pageNo,math.max(1,math.ceil(#emoteState.filtered/emoteState.pageSize))))
-		end
-		local renderCards
-		local function loadCatalog()
-			task.spawn(function()
-				local loaded
-				pcall(function()
-					local raw=game:HttpGet(emoteCatalogUrl); local json=HttpService:JSONDecode(raw); local rows=json and json.data or json
-					if type(rows)=="table" then loaded={}; for _,v in pairs(rows) do local id=tonumber(v.id); if id and id>0 then table.insert(loaded,{id=id,name=v.name or ("Emote "..id)}) end end end
-				end)
-				emoteState.data=(loaded and #loaded>0) and loaded or fallbackEmotes; filterData(); if renderCards then renderCards() end
-				notifyEmote(#emoteState.data.." R15 emotes available")
-			end)
-		end
-		local function makeWindow()
-			if emoteState.gui and emoteState.gui.Parent then emoteState.gui.Enabled=true; return end
-			loadEmoteSettings()
-			local sg=make("ScreenGui",{Name="TCOEmotes",ResetOnSpawn=false,DisplayOrder=120},nil); pcall(function() sg.Parent=game:GetService("CoreGui") end); if not sg.Parent then sg.Parent=localplr:WaitForChild("PlayerGui") end; emoteState.gui=sg
-			local panel=make("Frame",{Name="Main",Size=UDim2.fromOffset(500,430),Position=UDim2.new(.5,-250,.5,-215),BackgroundColor3=Color3.fromRGB(24,27,38),Active=true},sg); make("UICorner",{CornerRadius=UDim.new(0,10)},panel); make("UIStroke",{Color=Color3.fromRGB(93,115,190),Thickness=1.5,Transparency=.25},panel)
-			local bar=make("TextButton",{Name="TitleBar",Size=UDim2.new(1,0,0,36),BackgroundColor3=Color3.fromRGB(32,36,50),Text="  GUY HUB  •  R15 EMOTES",TextXAlignment=Enum.TextXAlignment.Left,AutoButtonColor=false},panel); styleButton(bar,true)
-			local close=make("TextButton",{Size=UDim2.fromOffset(30,28),Position=UDim2.new(1,-34,0,4),Text="X",BackgroundColor3=Color3.fromRGB(120,55,70)},bar); styleButton(close,false)
-			local mini=make("TextButton",{Size=UDim2.fromOffset(30,28),Position=UDim2.new(1,-68,0,4),Text="-"},bar); styleButton(mini,false)
-			local tabs=make("Frame",{Size=UDim2.new(1,-16,0,34),Position=UDim2.fromOffset(8,44),BackgroundTransparency=1},panel)
-			local tabButtons={}; local pages={}
-			local function addTab(name,x)
-				local b=make("TextButton",{Size=UDim2.new(1/3,-5,1,0),Position=UDim2.new(x,0,0,0),Text=name,BackgroundColor3=Color3.fromRGB(44,48,62)},tabs); styleButton(b,false); tabButtons[name]=b
-				local pg=make("Frame",{Name=name.."Page",Size=UDim2.new(1,-16,1,-88),Position=UDim2.fromOffset(8,82),BackgroundTransparency=1,Visible=name=="Emotes"},panel); pages[name]=pg
-				b.MouseButton1Click:Connect(function() for n,p in pairs(pages) do p.Visible=n==name end end)
-				return pg
-			end
-			local ep=addTab("Emotes",0); local sp=addTab("Speed",1/3); local stp=addTab("Settings",2/3); emoteState.page=ep; emoteState.speedPage=sp; emoteState.settingsPage=stp
-			local search=make("TextBox",{Size=UDim2.new(1,-150,0,30),Position=UDim2.fromOffset(0,0),PlaceholderText="Search emote name or ID...",Text="",ClearTextOnFocus=false,BackgroundColor3=Color3.fromRGB(38,42,55),TextColor3=Color3.new(1,1,1),PlaceholderColor3=Color3.fromRGB(150,155,170),Font=Enum.Font.Gotham,TextSize=12},ep); make("UICorner",{CornerRadius=UDim.new(0,6)},search)
-			local refresh=make("TextButton",{Size=UDim2.fromOffset(70,30),Position=UDim2.new(1,-70,0,0),Text="Refresh"},ep); styleButton(refresh,true)
-			local stop=make("TextButton",{Size=UDim2.fromOffset(70,30),Position=UDim2.new(1,-145,0,0),Text="Stop"},ep); styleButton(stop,false)
-			local grid=make("ScrollingFrame",{Size=UDim2.new(1,0,1,-72),Position=UDim2.fromOffset(0,38),BackgroundTransparency=1,ScrollBarThickness=5,CanvasSize=UDim2.new()},ep); local layout=make("UIGridLayout",{CellSize=UDim2.fromOffset(112,130),CellPadding=UDim2.fromOffset(8,8),SortOrder=Enum.SortOrder.LayoutOrder},grid)
-			local pageLabel=make("TextLabel",{Size=UDim2.fromOffset(180,26),Position=UDim2.new(.5,-90,1,-28),BackgroundTransparency=1,TextColor3=Color3.fromRGB(210,220,240),Text="",Font=Enum.Font.Gotham,TextSize=12},ep)
-			local prev=make("TextButton",{Size=UDim2.fromOffset(70,26),Position=UDim2.fromOffset(0,0),Text="Previous"},ep); styleButton(prev,false); prev.Position=UDim2.new(0,0,1,-28)
-			local next=make("TextButton",{Size=UDim2.fromOffset(70,26),Position=UDim2.new(1,-70,1,-28),Text="Next"},ep); styleButton(next,false)
-			local function addSetting(parent,y,label,value,cb)
-				local b=make("TextButton",{Size=UDim2.new(1,0,0,34),Position=UDim2.fromOffset(0,y),Text=label..": "..tostring(value),TextXAlignment=Enum.TextXAlignment.Left,BackgroundColor3=Color3.fromRGB(38,42,55)},parent); styleButton(b,false); b.MouseButton1Click:Connect(function() local v=cb(); b.Text=label..": "..tostring(v) end); return b
-			end
-			local speedBox=make("TextBox",{Size=UDim2.new(1,0,0,34),Position=UDim2.fromOffset(0,0),Text=tostring(emoteState.speed),PlaceholderText="Speed 0–5",BackgroundColor3=Color3.fromRGB(38,42,55),TextColor3=Color3.new(1,1,1),Font=Enum.Font.Gotham,TextSize=13},sp); make("UICorner",{CornerRadius=UDim.new(0,6)},speedBox)
-			local speedHint=make("TextLabel",{Size=UDim2.new(1,0,0,45),Position=UDim2.fromOffset(0,40),BackgroundTransparency=1,Text="Playback speed. 0 freezes the current emote; values above 1 are faster.",TextWrapped=true,TextColor3=Color3.fromRGB(180,190,210),Font=Enum.Font.Gotham,TextSize=12},sp)
-			local apply=make("TextButton",{Size=UDim2.new(1,0,0,34),Position=UDim2.fromOffset(0,90),Text="Apply speed"},sp); styleButton(apply,true)
-			addSetting(sp,135,"Loop emotes",emoteState.loop,function() emoteState.loop=not emoteState.loop; saveEmoteSettings(); return emoteState.loop end)
-			addSetting(sp,175,"Freeze emote",emoteState.freeze,function() emoteState.freeze=not emoteState.freeze; if emoteState.track then pcall(function() emoteState.track:AdjustSpeed(emoteState.freeze and 0 or emoteState.speed) end) end; return emoteState.freeze end)
-			addSetting(stp,0,"Stop previous tracks",emoteState.stopPrevious,function() emoteState.stopPrevious=not emoteState.stopPrevious; saveEmoteSettings(); return emoteState.stopPrevious end)
-			addSetting(stp,40,"Stop on respawn",emoteState.stopOnRespawn,function() emoteState.stopOnRespawn=not emoteState.stopOnRespawn; saveEmoteSettings(); return emoteState.stopOnRespawn end)
-			addSetting(stp,80,"Show asset IDs",emoteState.showIds,function() emoteState.showIds=not emoteState.showIds; saveEmoteSettings(); if renderCards then renderCards() end; return emoteState.showIds end)
-			addSetting(stp,120,"Favorites only",emoteState.favoritesOnly,function() emoteState.favoritesOnly=not emoteState.favoritesOnly; saveEmoteSettings(); filterData(); if renderCards then renderCards() end; return emoteState.favoritesOnly end)
-			make("TextLabel",{Size=UDim2.new(1,0,0,80),Position=UDim2.fromOffset(0,170),BackgroundTransparency=1,Text="R15 only\nCatalog supplied by 7yd7/sniper-Emote\nClick the star on a card to save favorites.",TextColor3=Color3.fromRGB(180,190,210),Font=Enum.Font.Gotham,TextSize=12,TextWrapped=true},stp)
-			renderCards=function()
-				for _,c in ipairs(grid:GetChildren()) do if c:IsA("Frame") then c:Destroy() end end
-				filterData(); local total=math.max(1,math.ceil(#emoteState.filtered/emoteState.pageSize)); local first=(emoteState.pageNo-1)*emoteState.pageSize+1; local last=math.min(#emoteState.filtered,first+emoteState.pageSize-1)
-				for i=first,last do local item=emoteState.filtered[i]; local card=make("Frame",{BackgroundColor3=Color3.fromRGB(32,36,48)},grid); make("UICorner",{CornerRadius=UDim.new(0,7)},card); local img=make("ImageButton",{Size=UDim2.new(1,-10,0,82),Position=UDim2.fromOffset(5,5),BackgroundColor3=Color3.fromRGB(22,25,34),Image="rbxthumb://type=Asset&id="..tostring(item.id).."&w=150&h=150",ScaleType=Enum.ScaleType.Fit},card); make("UICorner",{CornerRadius=UDim.new(0,6)},img); local name=make("TextLabel",{Size=UDim2.new(1,-8,0,30),Position=UDim2.fromOffset(4,88),BackgroundTransparency=1,Text=tostring(item.name)..(emoteState.showIds and "\n"..tostring(item.id) or ""),TextColor3=Color3.fromRGB(235,240,255),Font=Enum.Font.GothamSemibold,TextSize=10,TextWrapped=true},card); local fav=make("TextButton",{Size=UDim2.fromOffset(22,22),Position=UDim2.new(1,-26,0,4),Text=emoteState.favorites[tostring(item.id)] and "★" or "☆",BackgroundTransparency=0.25,BackgroundColor3=Color3.fromRGB(45,48,60),TextColor3=Color3.fromRGB(255,220,90),TextSize=16},card); make("UICorner",{CornerRadius=UDim.new(1,0)},fav); img.MouseButton1Click:Connect(function() playEmote(item) end); fav.MouseButton1Click:Connect(function() local k=tostring(item.id); emoteState.favorites[k]=not emoteState.favorites[k]; fav.Text=emoteState.favorites[k] and "★" or "☆"; saveEmoteSettings() end) end
-				pageLabel.Text=(#emoteState.filtered==0 and "No matching emotes" or ("Page "..emoteState.pageNo.." / "..total.."  •  "..#emoteState.filtered.." results)); grid.CanvasSize=UDim2.fromOffset(0,math.ceil(math.max(1,last-first+1)/4)*138)
-			end
-			search:GetPropertyChangedSignal("Text"):Connect(function() emoteState.search=search.Text; emoteState.pageNo=1; renderCards() end); refresh.MouseButton1Click:Connect(loadCatalog); stop.MouseButton1Click:Connect(stopEmote); prev.MouseButton1Click:Connect(function() emoteState.pageNo=math.max(1,emoteState.pageNo-1); renderCards() end); next.MouseButton1Click:Connect(function() emoteState.pageNo=emoteState.pageNo+1; renderCards() end); apply.MouseButton1Click:Connect(function() emoteState.speed=math.clamp(tonumber(speedBox.Text) or 1,0,5); speedBox.Text=tostring(emoteState.speed); saveEmoteSettings(); if emoteState.track then pcall(function() emoteState.track:AdjustSpeed(emoteState.freeze and 0 or emoteState.speed) end) end end)
-			local dragging=false; local dragStart, panelStart
-			emoteState.connections[#emoteState.connections+1]=bar.InputBegan:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dragging=true; dragStart=i.Position; panelStart=panel.Position end end)
-			emoteState.connections[#emoteState.connections+1]=UIS.InputChanged:Connect(function(i) if dragging and (i.UserInputType==Enum.UserInputType.MouseMovement or i.UserInputType==Enum.UserInputType.Touch) then local d=i.Position-dragStart; panel.Position=UDim2.new(panelStart.X.Scale,panelStart.X.Offset+d.X,panelStart.Y.Scale,panelStart.Y.Offset+d.Y) end end)
-		emoteState.connections[#emoteState.connections+1]=UIS.InputEnded:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then dragging=false end end)
-			mini.MouseButton1Click:Connect(function() emoteState.minimized=not emoteState.minimized; for _,v in ipairs(panel:GetChildren()) do if v~=bar and v~=close and v~=mini and v:IsA("GuiObject") then v.Visible=not emoteState.minimized end end; panel.Size=emoteState.minimized and UDim2.fromOffset(500,36) or UDim2.fromOffset(500,430) end)
-			close.MouseButton1Click:Connect(function() stopEmote(); clearConnections(); sg:Destroy(); emoteState.gui=nil end)
-			if emoteState.stopOnRespawn then emoteState.connections[#emoteState.connections+1]=localplr.CharacterAdded:Connect(function() stopEmote() end) end
-			renderCards(); loadCatalog()
-		end
-		lib.makebutton("Load Emote GUI", emotestab, makeWindow)
-		lib.makelabel("R15 emote browser • search, speed, freeze, favorites", emotestab)
-	end
 	getgenv()._tcoP = getgenv()._tcoP or {}
 	local S = getgenv()._tcoP
+
 	local function hum()
 		local c = localplr.Character
 		return c and c:FindFirstChildOfClass("Humanoid")
@@ -5445,7 +5532,9 @@ do
 		if not S.selName then return nil end
 		return game.Players:FindFirstChild(S.selName)
 	end
-	lib.makelabel("
+
+	lib.makelabel("--- Quick ---", ptab)
+
 	local function getEnlightenTool()
 		local function findArk(container)
 			if not container then return nil end
@@ -5454,6 +5543,7 @@ do
 		end
 		return findArk(localplr.Backpack) or findArk(localplr.Character)
 	end
+
 	local function hideToolVisual(tool)
 		if not tool then return end
 		pcall(function()
@@ -5477,6 +5567,7 @@ do
 			end
 		end)
 	end
+
 	local function stopToolHoldAnim()
 		pcall(function()
 			local char = localplr.Character
@@ -5505,6 +5596,7 @@ do
 			end
 		end)
 	end
+
 	local function refreshEnlightenTool()
 		local tool = getEnlightenTool()
 		if not tool then return false end
@@ -5530,6 +5622,7 @@ do
 		end
 		return true
 	end
+
 	local function refreshArkenstoneTool()
 		local tool = getEnlightenTool()
 		if not tool then return false end
@@ -5537,6 +5630,7 @@ do
 		local bag = localplr.Backpack
 		if not char or not bag then return false end
 		hideToolVisual(tool)
+		-- micro-activate hidden (same idea as Delete, no visible flash)
 		pcall(function()
 			if tool.Parent == bag then
 				tool.Parent = char
@@ -5554,6 +5648,12 @@ do
 		hideToolVisual(tool)
 		return true
 	end
+
+
+
+
+	
+
 	local function joinChosenOneServer(kind)
 		task.spawn(function()
 			local ok, err = pcall(function()
@@ -5573,6 +5673,7 @@ do
 						if server.maxPlayers > chosen.maxPlayers or (server.maxPlayers == chosen.maxPlayers and server.playing < chosen.playing) then chosen = server end
 					end
 				else
+					-- Roblox's public-server API does not expose an actual age field; use the first open server from ascending order as the OG-style choice.
 					for _, server in ipairs(candidates) do if server.playing < chosen.playing then chosen = server end end
 				end
 				ts:TeleportToPlaceInstance(placeId, chosen.id, localplr)
@@ -5588,6 +5689,7 @@ do
 		end)
 		if not ok then notifyP("Rejoin failed: "..tostring(err)) end
 	end)
+
 	lib.makebutton("Server hop", ptab, function()
 		task.spawn(function()
 			pcall(function()
@@ -5615,7 +5717,9 @@ do
 			end)
 		end)
 	end)
+
 	lib.makelabel("--- Movement ---", ptab)
+
 	lib.maketextbox("WalkSpeed value", ptab, function(txt)
 		local n = tonumber(txt)
 		if n then S.ws = n notifyP("WS set " .. n) end
@@ -5633,6 +5737,7 @@ do
 			end
 		end)
 	end, false)
+
 	lib.maketextbox("JumpPower value", ptab, function(txt)
 		local n = tonumber(txt)
 		if n then S.jp = n notifyP("JP set " .. n) end
@@ -5653,6 +5758,7 @@ do
 			end
 		end)
 	end, false)
+
 	lib.maketoggle("Infinite Jump", ptab, function(bool)
 		S.infJump = bool
 		if S.infJumpConn then pcall(function() S.infJumpConn:Disconnect() end) S.infJumpConn = nil end
@@ -5665,6 +5771,7 @@ do
 			end)
 		end)
 	end, false)
+
 	lib.makelabel("--- Fling target ---", flingtab)
 	local function flingNotify(t)
 		pcall(function()
@@ -5714,6 +5821,7 @@ do
 			flingNotify("Target tool ready - click a player")
 		end)
 	end)
+
 		lib.makelabel("--- Walk fling ---", flingtab)
 	lib.maketextbox("Walk fling power (default 10000)", flingtab, function(txt)
 		local n = tonumber(txt)
@@ -5753,6 +5861,7 @@ do
 			end
 		end)
 	end, false)
+
 	lib.makelabel("--- Shield / radius settings ---", flingtab)
 	S.orbitRadius = S.orbitRadius or 18
 	S.orbitSpin = S.orbitSpin or 2.4
@@ -5774,11 +5883,15 @@ do
 		local n = tonumber(txt)
 		if n and n > 0 then S.selfFlingRadius = n flingNotify("Self aura radius " .. n) end
 	end)
+
 	lib.makelabel("--- Fling actions ---", flingtab)
+	-- one-shot: fling ~5 seconds then stop (returns home after once done)
 	local function flingOnce5s(targetHRP)
 		if not targetHRP or typeof(flingWithReturn) ~= "function" then return end
+		-- ~5 seconds at heartbeat ~60fps -> ~300 frames, use time based
 		flingWithReturn(targetHRP, 5, true)
 	end
+
 	lib.makebutton("Fling once (selected)", flingtab, function()
 		local p = getSel()
 		if not p or not p.Character then flingNotify("No target") return end
@@ -5858,6 +5971,8 @@ do
 		end)
 		flingNotify("Fling all once done")
 	end)
+
+	-- Kill fling: NEW climb method, moderate force into void (not sky high)
 	lib.maketoggle("Kill fling (selected)", flingtab, function(bool)
 		S.killFling = bool
 		local home = hrp() and hrp().CFrame
@@ -5898,6 +6013,7 @@ do
 			flingNotify("Kill fling done")
 		end
 	end)
+
 	lib.maketoggle("Orbit shield fling (selected)", flingtab, function(bool)
 		S.orbitFling = bool
 		local home = hrp() and hrp().CFrame
@@ -5920,6 +6036,7 @@ do
 					local rad = S.orbitRadius or 12
 					local spin = S.orbitSpin or 0.85
 					ang = ang + spin
+					-- stay near selected (shield orbit position) then flingHold anyone who enters radius
 					my.CFrame = center.CFrame * CFrame.Angles(0, ang, 0) * CFrame.new(0, 0, -math.max(3, rad * 0.35))
 					for _, other in pairs(game.Players:GetPlayers()) do
 						if other ~= localplr and other ~= sel and other.Character then
@@ -5938,6 +6055,7 @@ do
 			end)
 		end)
 	end, false)
+
 	lib.maketoggle("Protect fling aura (selected)", flingtab, function(bool)
 		S.protectFling = bool
 		local home = hrp() and hrp().CFrame
@@ -5976,6 +6094,7 @@ do
 			end)
 		end)
 	end, false)
+
 	lib.maketoggle("Fling aura (for yourself)", flingtab, function(bool)
 		S.selfFlingAura = bool
 		local home = hrp() and hrp().CFrame
@@ -5994,6 +6113,7 @@ do
 						if other ~= localplr and other.Character then
 							local oh = other.Character:FindFirstChild("HumanoidRootPart")
 							if oh and (oh.Position - my.Position).Magnitude <= rad then
+								-- do NOT teleport into them (that flings you); only push them
 								local v = Vector3.new((math.random()-0.5)*3e4, 3e4, (math.random()-0.5)*3e4)
 								oh.AssemblyLinearVelocity = v
 								pcall(function() oh.Velocity = v end)
@@ -6006,6 +6126,7 @@ do
 			if typeof(tcoSoftReturnHome) == "function" then tcoSoftReturnHome(home) end
 		end)
 	end, false)
+
 	lib.maketoggle("Fling on touch (collision)", flingtab, function(bool)
 		S.touchFling = bool
 		if not bool then return end
@@ -6028,6 +6149,8 @@ do
 			end
 		end)
 	end, false)
+
+	-- Sky lift: stay under/inside them with old fling contact + strong UP velocity (physics)
 	lib.maketextbox("Sky lift speed (default 120)", flingtab, function(txt)
 		local n = tonumber(txt)
 		if n and n > 0 then S.skyLiftSpeed = n end
@@ -6060,6 +6183,7 @@ do
 					for _, part in pairs(char:GetDescendants()) do
 						if part:IsA("BasePart") then part.CanCollide = false end
 					end
+					-- face flat under them (hide nameplate angle)
 					local under = th.Position + Vector3.new(0, -3.2, 0)
 					my.CFrame = CFrame.new(under) * CFrame.Angles(-math.pi/2, 0, 0)
 					if not bv or not bv.Parent then
@@ -6070,6 +6194,7 @@ do
 					end
 					local spd = S.skyLiftSpeed or 120
 					bv.Velocity = Vector3.new(0, spd, 0)
+					-- also push them up so lift is not client-only
 					th.AssemblyLinearVelocity = Vector3.new(th.AssemblyLinearVelocity.X * 0.2, math.max(th.AssemblyLinearVelocity.Y, spd * 0.85), th.AssemblyLinearVelocity.Z * 0.2)
 				end)
 				task.wait()
@@ -6078,6 +6203,9 @@ do
 			if typeof(tcoSoftReturnHome) == "function" then tcoSoftReturnHome(home) end
 		end)
 	end, false)
+
+
+	-- ===== Sonic R15 moveset (Forsaken-style ability bar) =====
 	do
 		local RS = game:GetService("RunService")
 		local UIS = game:GetService("UserInputService")
@@ -6090,16 +6218,18 @@ do
 		local runTrack, abilityTrack, idleTrack = nil, nil, nil
 		local abilityBusy = false
 		local abilityGui = nil
-		local slowAnimId = 132168791204839
-		local fastAnimId = 82650166267713
-		local spinAnimId = 110172609245744
-		local idleAnimId = 134034549718293
-		local exeIdleId = 107014191831064
-		local tpAnimId = 128011595312625
-		local flingAnimId = 87206842180130
-		local tornadoAnimId = 76065312795694
-		local dashAnimId = 128779579295748
-		local superSonicId = 132602449607962
+		-- Vexro emote IDs (actual Sonic / EXE catalog emotes)
+		local slowAnimId = 132168791204839 -- Sonic the Hedgehog Run
+		local fastAnimId = 82650166267713 -- Classic Sonic Run
+		local spinAnimId = 110172609245744 -- Hedgehog's Spindash (real sonic spindash)
+		local idleAnimId = 134034549718293 -- Sonic Idle Wait
+		local exeIdleId = 107014191831064 -- Sonic.EXE Pose
+		local tpAnimId = 128011595312625 -- Instant 180 Flip
+		local flingAnimId = 87206842180130 -- Sonic The Hedgedog Roll
+		local tornadoAnimId = 76065312795694 -- Tornado Loop
+		local dashAnimId = 128779579295748 -- Hot Backflip
+		local superSonicId = 132602449607962 -- Super Sonic
+		-- marketplace logos via rbxthumb
 		local logos = {
 			spin = "rbxthumb://type=Asset&id=12052385551&w=150&h=150",
 			sprint = "rbxthumb://type=Asset&id=10491133376&w=150&h=150",
@@ -6109,12 +6239,14 @@ do
 		}
 		local cds = {spin=0, sprint=0, tp=0, tornado=0, dash=0}
 		local cdMax = {spin=6, sprint=10, tp=8, tornado=10, dash=3}
+
 		local function stopTracks()
 			pcall(function() if runTrack then runTrack:Stop(0.15) end end)
 			pcall(function() if abilityTrack then abilityTrack:Stop(0.1) end end)
 			pcall(function() if idleTrack then idleTrack:Stop(0.15) end end)
 			runTrack, abilityTrack, idleTrack = nil, nil, nil
 		end
+
 		local function loadAnim(id, priority)
 			local char = localplr.Character
 			local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -6124,6 +6256,7 @@ do
 				animator = Instance.new("Animator")
 				animator.Parent = hum
 			end
+			-- Vexro method: resolve catalog asset via GetObjects first
 			local anim = nil
 			pcall(function()
 				local objects = game:GetObjects("rbxassetid://" .. tostring(id))
@@ -6147,6 +6280,7 @@ do
 			end
 			return nil
 		end
+
 		local function playRun(fast)
 			pcall(function() if idleTrack then idleTrack:Stop(0.1) end end)
 			pcall(function() if runTrack then runTrack:Stop(0.1) end end)
@@ -6157,6 +6291,7 @@ do
 				runTrack:AdjustSpeed(fast and 1.15 or 0.85)
 			end
 		end
+
 		local function playIdle()
 			pcall(function() if runTrack then runTrack:Stop(0.15) end end)
 			runTrack = nil
@@ -6168,6 +6303,7 @@ do
 				idleTrack:Play(0.2)
 			end
 		end
+
 		local function playAbility(id, looped)
 			pcall(function() if abilityTrack then abilityTrack:Stop(0.05) end end)
 			abilityTrack = loadAnim(id, Enum.AnimationPriority.Action4)
@@ -6177,6 +6313,7 @@ do
 			end
 			return abilityTrack
 		end
+
 		local function setFov(fov)
 			pcall(function()
 				local cam = workspace.CurrentCamera
@@ -6185,6 +6322,7 @@ do
 				end
 			end)
 		end
+
 		local function enableWalkFlingTemp(sec)
 			task.spawn(function()
 				local was = S.walkFling
@@ -6216,6 +6354,7 @@ do
 				end
 			end)
 		end
+
 		local function resumeRunIfOn()
 			if sonicOn then
 				local moving = false
@@ -6228,13 +6367,16 @@ do
 				end
 			end
 		end
+
 		local function destroyAbilityGui()
 			if abilityGui then pcall(function() abilityGui:Destroy() end) abilityGui = nil end
 		end
+
 		local function makeAbilityGui()
 			destroyAbilityGui()
 			local isMobile = UIS.TouchEnabled == true
 			local hasKeyboard = UIS.KeyboardEnabled == true
+			-- phone: compact row above jump; laptop: bigger arc around jump
 			local btnSize = (isMobile and not hasKeyboard) and 42 or 58
 			local sg = Instance.new("ScreenGui")
 			sg.Name = "TCOSonicAbilities"
@@ -6252,6 +6394,7 @@ do
 			center.BackgroundTransparency = 1
 			center.Parent = sg
 			if isMobile and not hasKeyboard then
+				-- horizontal strip above jump: left→right = 1..5
 				center.AnchorPoint = Vector2.new(1, 1)
 				center.Position = UDim2.new(1, -8, 1, -145)
 				center.Size = UDim2.new(0, (btnSize + 6) * 5 + 8, 0, btnSize + 28)
@@ -6320,6 +6463,7 @@ do
 					end)
 				end
 			else
+				-- PC/laptop: horizontal circle line (same as mobile)
 				center.AnchorPoint = Vector2.new(1, 1)
 				center.Position = UDim2.new(1, -8, 1, -145)
 				center.Size = UDim2.new(0, (btnSize + 6) * 5 + 8, 0, btnSize + 28)
@@ -6395,6 +6539,7 @@ do
 				end
 			end)
 		end
+
 		local function nearestPlayerHRP()
 			local my = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
 			if not my then return nil end
@@ -6410,6 +6555,7 @@ do
 			end
 			return best
 		end
+
 		getgenv()._tcoSonicUse = function(key)
 			if not sonicOn or abilityBusy then return end
 			if (cds[key] or 0) > tick() then return end
@@ -6442,18 +6588,22 @@ do
 						hoverBG.CFrame = my.CFrame
 						hoverBG.Parent = my
 						pcall(function() hum.PlatformStand = true end)
+
 						local isMobile = UIS.TouchEnabled and not UIS.KeyboardEnabled
 						local aimbotOn = false
-						local aimTarget = nil
+						local aimTarget = nil -- BasePart HRP
 						local aimHighlight = nil
 						local fired = false
 						local cam = workspace.CurrentCamera
+
 						local aimGui = Instance.new("ScreenGui")
 						aimGui.Name = "TCOSonicAim"
 						aimGui.IgnoreGuiInset = true
 						aimGui.DisplayOrder = 120
 						pcall(function() aimGui.Parent = game.CoreGui end)
 						if not aimGui.Parent then aimGui.Parent = localplr.PlayerGui end
+
+						-- green outline frame (device edge)
 						local edge = Instance.new("Frame")
 						edge.Name = "GreenEdge"
 						edge.Size = UDim2.new(1, 0, 1, 0)
@@ -6466,6 +6616,7 @@ do
 						edgeStroke.Thickness = 6
 						edgeStroke.Transparency = 0.15
 						edgeStroke.Parent = edge
+						-- green transparent overlay
 						local tint = Instance.new("Frame")
 						tint.Name = "GreenTint"
 						tint.Size = UDim2.new(1, 0, 1, 0)
@@ -6474,6 +6625,7 @@ do
 						tint.BorderSizePixel = 0
 						tint.Visible = false
 						tint.Parent = aimGui
+
 						local cross = Instance.new("TextLabel")
 						cross.Size = UDim2.new(0, 52, 0, 52)
 						cross.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -6484,6 +6636,7 @@ do
 						cross.TextSize = 42
 						cross.Font = Enum.Font.GothamBold
 						cross.Parent = aimGui
+
 						local hint = Instance.new("TextLabel")
 						hint.Size = UDim2.new(0, 320, 0, 40)
 						hint.AnchorPoint = Vector2.new(0.5, 0)
@@ -6495,6 +6648,8 @@ do
 						hint.Font = Enum.Font.GothamBold
 						hint.TextWrapped = true
 						hint.Parent = aimGui
+
+						-- aimbot toggle top-right (only during spindash)
 						local abBtn = Instance.new("TextButton")
 						abBtn.Name = "AimbotToggle"
 						abBtn.AnchorPoint = Vector2.new(1, 0)
@@ -6511,6 +6666,7 @@ do
 						abStroke.Color = Color3.fromRGB(40, 255, 90)
 						abStroke.Thickness = 1.5
 						abStroke.Parent = abBtn
+
 						local function setAimbot(on)
 							aimbotOn = on
 							abBtn.Text = on and "Aimbot: ON" or "Aimbot: OFF"
@@ -6526,6 +6682,8 @@ do
 						abBtn.MouseButton1Click:Connect(function()
 							setAimbot(not aimbotOn)
 						end)
+
+						-- mobile GO button only
 						local goBtn = nil
 						if isMobile then
 							goBtn = Instance.new("TextButton")
@@ -6544,9 +6702,11 @@ do
 								fired = true
 							end)
 						end
+
 						local function clearAimbotVisual()
 							if aimHighlight then pcall(function() aimHighlight:Destroy() end) aimHighlight = nil end
 						end
+
 						local function updateAimbotTarget()
 							if not aimbotOn then clearAimbotVisual() return end
 							cam = workspace.CurrentCamera
@@ -6586,7 +6746,10 @@ do
 								end
 							end
 						end
+
+						-- ignore the input that opened ability
 						task.wait(0.4)
+
 						local conn
 						if not isMobile then
 							conn = UIS.InputBegan:Connect(function(inp, gp)
@@ -6598,6 +6761,7 @@ do
 								end
 							end)
 						end
+
 						local tAim = tick()
 						while not fired and tick() - tAim < 10 do
 							pcall(function()
@@ -6622,6 +6786,7 @@ do
 							hum = localplr.Character and localplr.Character:FindFirstChildOfClass("Humanoid")
 							if hum then hum.PlatformStand = false end
 						end)
+
 						if not fired then
 							pcall(function() if abilityTrack then abilityTrack:Stop(0.1) end end)
 						else
@@ -6638,6 +6803,8 @@ do
 							else
 								dest = start + Vector3.new(0, 0, -280)
 							end
+
+							-- walk fling for duration of ability
 							local wasWF = S.walkFling
 							S.walkFling = true
 							getgenv()._tcoHiddenFling = true
@@ -6665,6 +6832,7 @@ do
 									end)
 								end
 							end)
+
 							local function keepAboveGround(pos)
 								local origin = pos + Vector3.new(0, 10, 0)
 								local params = RaycastParams.new()
@@ -6681,6 +6849,8 @@ do
 								end
 								return pos
 							end
+
+							-- phase 1: go through / into them
 							local t0 = tick()
 							local chaseTime = 1.2
 							local speed = 95
@@ -6691,6 +6861,7 @@ do
 									if followTarget and followTarget.Parent then
 										dest = followTarget.Position
 										local to = dest - my.Position
+										-- clip through them (old fling style)
 										if to.Magnitude < 10 then
 											my.CFrame = followTarget.CFrame
 										else
@@ -6707,6 +6878,8 @@ do
 								end)
 								task.wait()
 							end
+
+							-- phase 2: stay inside / on them and fling for 4 seconds
 							local flingT0 = tick()
 							while tick() - flingT0 < 1.8 do
 								pcall(function()
@@ -6738,6 +6911,8 @@ do
 								end)
 								task.wait()
 							end
+
+							-- stop walk fling + return home
 							getgenv()._tcoSpinWFToken = nil
 							S.walkFling = wasWF and true or false
 							getgenv()._tcoHiddenFling = S.walkFling and true or false
@@ -6841,6 +7016,7 @@ do
 								my = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
 								if my then
 									local pos = start:Lerp(dest, e)
+									-- keep above ground
 									local params = RaycastParams.new()
 									params.FilterDescendantsInstances = {localplr.Character}
 									params.FilterType = Enum.RaycastFilterType.Exclude
@@ -6865,6 +7041,7 @@ do
 				resumeRunIfOn()
 			end)
 		end
+
 		lib.makelabel("--- Griefer moveset ---", animtab)
 		lib.makelabel("REQUIRES BKIT. Keys: 1 Runner 2 Scream 3 Punch 4 Final", animtab)
 		lib.maketoggle("Griefer moveset", animtab, function(bool)
@@ -6874,6 +7051,7 @@ do
 				getgenv()._tcoGrieferPending = bool
 			end
 		end, false)
+
 		lib.makelabel("--- Void Phantom ---", animtab)
 		lib.makelabel("Fling moveset + Vexro emotes. Keys 1-4", animtab)
 		lib.maketoggle("Void Phantom", animtab, function(bool)
@@ -6885,6 +7063,7 @@ do
 				getgenv()._tcoPhantomPending = bool
 			end
 		end, false)
+
 		lib.makelabel("--- temu sonic.exe ---", animtab)
 		lib.makelabel("Toggle on, walk to build speed. Idle = sonic.exe. Keys 1-5.", animtab)
 		getgenv()._tcoSonicSetEnabled = function(want)
@@ -6984,6 +7163,7 @@ do
 						local hum = char and char:FindFirstChildOfClass("Humanoid")
 						local moving = hum and hum.MoveDirection.Magnitude > 0.08
 						if abilityBusy then
+							-- abilities handle themselves
 						elseif moving then
 							sonicBuild = math.clamp(sonicBuild + 0.012, 0, 1)
 							local spd = 16 + (sonicMax - 16) * sonicBuild
@@ -7004,6 +7184,8 @@ do
 							end
 							wasMoving = false
 						end
+						-- hotkeys 1-5
+						-- handled below
 					end)
 					task.wait(0.03)
 				end
@@ -7027,7 +7209,11 @@ do
 			end)
 		end, false)
 	end
+
+
+
 lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
+
 	lib.maketoggle("Chosen Fly", ptab, function(bool)
 		S.chosenFly = bool
 		if S.flyBV then pcall(function() S.flyBV:Destroy() end) S.flyBV = nil end
@@ -7040,8 +7226,10 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			if h then h.PlatformStand = false end
 		end)
 		if not bool then return end
+
 		S.flySpeed = S.flySpeed or 50
 		S.flyLastToggle = 0
+
 		local function setFly(on)
 			local h = hum()
 			local r = hrp()
@@ -7073,12 +7261,14 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 				notifyP("Fly OFF")
 			end
 		end
+
 		S.flyJumpConn = game:GetService("UserInputService").JumpRequest:Connect(function()
 			if not S.chosenFly then return end
 			if tick() - (S.flyLastToggle or 0) < 0.45 then return end
 			S.flyLastToggle = tick()
 			setFly(not S.flyOn)
 		end)
+
 		S.flyRender = game:GetService("RunService").RenderStepped:Connect(function()
 			if not S.chosenFly or not S.flyOn then return end
 			pcall(function()
@@ -7096,6 +7286,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 				local look = cf.LookVector
 				local right = cf.RightVector
 				local upv = cf.UpVector
+
 				local dir = Vector3.new(0, 0, 0)
 				local md = h.MoveDirection
 				if md.Magnitude > 0.05 then
@@ -7107,18 +7298,21 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 					local rightAmt = md:Dot(flatRight)
 					dir = look * forwardAmt + right * rightAmt
 				end
+
 				if UIS:IsKeyDown(Enum.KeyCode.Space) then
 					dir = dir + Vector3.new(0, 1, 0)
 				end
 				if UIS:IsKeyDown(Enum.KeyCode.LeftControl) or UIS:IsKeyDown(Enum.KeyCode.C) then
 					dir = dir - Vector3.new(0, 1, 0)
 				end
+
 				if dir.Magnitude > 0 then
 					dir = dir.Unit
 					S.flyBV.Velocity = dir * speed
 				else
 					S.flyBV.Velocity = Vector3.new(0, 0, 0)
 				end
+
 				if S.flyBG and S.flyBG.Parent then
 					S.flyBG.CFrame = CFrame.new(r.Position, r.Position + look)
 				end
@@ -7129,10 +7323,12 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			end)
 		end)
 	end, false)
+
 	lib.maketextbox("Fly speed (default 50)", ptab, function(txt)
 		local n = tonumber(txt)
 		if n and n > 0 then S.flySpeed = n notifyP("Fly speed " .. n) end
 	end)
+
 	lib.makelabel("--- Target player ---", ptab)
 	lib.maketoggle("Use Display Names (player list)", ptab, function(bool)
 		getgenv()._tcoUseDisplayName = bool
@@ -7145,12 +7341,14 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			notifyP("Selected " .. tostring(S.selName))
 		end
 	end)
+
 	lib.makebutton("Refresh player list", ptab, function()
 		pcall(function()
 			lib.updatedropdown(drop, playerNames())
 		end)
 		notifyP("List refreshed")
 	end)
+
 	lib.makebutton("TP to player", ptab, function()
 		local p = getSel()
 		if not p or not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") then
@@ -7161,6 +7359,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			hrp().CFrame = p.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
 		end)
 	end)
+
 	lib.makebutton("View player", ptab, function()
 		local p = getSel()
 		if not p or not p.Character then notifyP("No target") return end
@@ -7170,12 +7369,15 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			notifyP("Viewing " .. p.Name)
 		end
 	end)
+
 	lib.makebutton("Unview (me)", ptab, function()
 		local h = hum()
 		if h then workspace.CurrentCamera.CameraSubject = h end
 		notifyP("Camera back to you")
 	end)
+
 	lib.makelabel("--- Annoy ---", ptab)
+
 	lib.maketoggle("Spam TP behind", ptab, function(bool)
 		S.spamTP = bool
 		if not bool then return end
@@ -7191,6 +7393,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			end
 		end)
 	end, false)
+
 	lib.maketoggle("Orbit target", ptab, function(bool)
 		S.orbit = bool
 		if not bool then return end
@@ -7210,6 +7413,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			end
 		end)
 	end, false)
+
 	lib.maketoggle("Bubble chat (need invis)", ptab, function(bool)
 		S.bubbleChat = bool
 		if not bool then return end
@@ -7233,6 +7437,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			end
 		end)
 	end, false)
+
 	lib.makebutton("Chat: freeze them", ptab, function()
 		local p = getSel()
 		if not p then notifyP("No target") return end
@@ -7245,6 +7450,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			end
 		end)
 	end)
+
 	lib.makebutton("Chat: reset them", ptab, function()
 		local p = getSel()
 		if not p then notifyP("No target") return end
@@ -7255,6 +7461,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 			if ch then ch:SendAsync(msg) end
 		end)
 	end)
+
 	lib.makebutton("Chat: glitch them", ptab, function()
 		local p = getSel()
 		if not p then notifyP("No target") return end
@@ -7266,6 +7473,7 @@ lib.makelabel("--- Fly (stays in player stuff) ---", ptab)
 		end)
 	end)
 end
+
 do
 	local bbtab = lib.maketab("boombox ids")
 	lib.makelabel("Copy ID then play on boombox", bbtab)
@@ -7349,6 +7557,8 @@ do
 		end
 	end)
 end
+
+
 	lib.makelabel("--- Selected boombox ---", bbtab)
 	bboxtxt = lib.makelabel("No Boombox Selected", bbtab)
 	bbid = bbid or ""
@@ -7364,25 +7574,30 @@ end
 			bbsbox.LineThickness = -1
 		end
 	end)
+
 lib.makelabel("Needs Build kit equipped / in backpack", jailtab)
+
 lib.maketextbox("Jail aura range (default 40)", jailtab, function(txt)
 	local n = tonumber(txt)
 	if n and n > 0 then
 		getgenv()._tcoJailRange = n
 	end
 end)
+
 lib.maketextbox("Build speed (default 0.02, lower=faster)", jailtab, function(txt)
 	local n = tonumber(txt)
 	if n and n >= 0 then
 		getgenv()._tcoJailRebuild = n
 	end
 end)
+
 lib.maketextbox("Cube half-size blocks (default 2)", jailtab, function(txt)
 	local n = tonumber(txt)
 	if n and n >= 1 then
 		getgenv()._tcoJailHalf = math.floor(n)
 	end
 end)
+
 lib.maketoggle("Jail Aura", jailtab, function(bool)
 	getgenv()._tcoJailAura = bool
 	if not bool then return end
@@ -7414,6 +7629,7 @@ lib.maketoggle("Jail Aura", jailtab, function(bool)
 						end
 					end)
 				end
+				-- first jail-tab method: nearest only, tiny jail, rebuild faster than delete
 				local best, bd = nil, range
 				for _, p in pairs(game.Players:GetPlayers()) do
 					if p ~= localplr and p.Character then
@@ -7427,6 +7643,7 @@ lib.maketoggle("Jail Aura", jailtab, function(bool)
 				if not best then return end
 				local b = best.Position
 				local half = tonumber(getgenv()._tcoJailHalf) or 2
+				-- floor + 4 walls + ceiling (tiny box, same spots every tick)
 				local spots = {
 					Vector3.new(0, -1.5, 0),
 					Vector3.new(half, 0, 0), Vector3.new(-half, 0, 0),
@@ -7446,6 +7663,11 @@ lib.maketoggle("Jail Aura", jailtab, function(bool)
 		end
 	end)
 end, false)
+
+
+
+
+
 function notifySpam(text)
 	pcall(function()
 		game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -7455,6 +7677,7 @@ function notifySpam(text)
 		})
 	end)
 end
+
 function saySpamMsg(msg, hide)
 	if not msg or msg == "" then return end
 	if hide and string.sub(msg, 1, 1) ~= ";" then
@@ -7476,12 +7699,14 @@ function saySpamMsg(msg, hide)
 		end
 	end)
 end
+
 spamDelay = 1
 spamList = {}
 selectedSpam = nil
 spamRunning = false
 hideCmd = false
 spamDropdown = nil
+
 lib.makelabel("Spam delay (seconds)", cmdspamtab)
 lib.maketextbox("Set spam delay (e.g. 1)", cmdspamtab, function(txt)
 	local n = tonumber(txt)
@@ -7492,6 +7717,7 @@ lib.maketextbox("Set spam delay (e.g. 1)", cmdspamtab, function(txt)
 		notifySpam("Invalid delay")
 	end
 end)
+
 lib.makelabel("Type anything to add to list", cmdspamtab)
 lib.maketextbox("Type command / text then enter", cmdspamtab, function(txt)
 	if not txt or txt == "" then return end
@@ -7504,10 +7730,12 @@ lib.maketextbox("Type command / text then enter", cmdspamtab, function(txt)
 	end)
 	notifySpam("Added: " .. txt)
 end)
+
 lib.maketoggle("Hide command (; prefix)", cmdspamtab, function(bool)
 	hideCmd = bool
 	notifySpam(bool and "Hide ON (; added)" or "Hide OFF")
 end, false)
+
 lib.makelabel("Select what to spam", cmdspamtab)
 spamDropdown = lib.makedropdown("Saved messages", cmdspamtab, {"(empty)"}, function(sel)
 	if sel and sel ~= "(empty)" then
@@ -7515,6 +7743,7 @@ spamDropdown = lib.makedropdown("Saved messages", cmdspamtab, {"(empty)"}, funct
 		notifySpam("Selected: " .. tostring(sel))
 	end
 end)
+
 lib.makebutton("Clear list", cmdspamtab, function()
 	spamList = {}
 	selectedSpam = nil
@@ -7525,6 +7754,7 @@ lib.makebutton("Clear list", cmdspamtab, function()
 	end)
 	notifySpam("List cleared")
 end)
+
 lib.maketoggle("Spam selected (toggle)", cmdspamtab, function(bool)
 	spamRunning = bool
 	if spamRunning then
@@ -7541,9 +7771,11 @@ lib.maketoggle("Spam selected (toggle)", cmdspamtab, function(bool)
 		notifySpam("Spamming OFF")
 	end
 end, false)
+
 lib.makebutton("Load 2 commands spam GUI", cmdspamtab, function()
 	loadDualSpamGui()
 end)
+
 loadDualSpamGui = function()
 	local existing = game.CoreGui:FindFirstChild("TCODualSpamGui")
 		or (game.Players.LocalPlayer:FindFirstChild("PlayerGui")
@@ -7553,9 +7785,11 @@ loadDualSpamGui = function()
 		or (game.Players.LocalPlayer:FindFirstChild("PlayerGui")
 			and game.Players.LocalPlayer.PlayerGui:FindFirstChild("TCODualSpamMini"))
 	if miniOld then miniOld:Destroy() end
+
 	local Players = game:GetService("Players")
 	local UIS = game:GetService("UserInputService")
 	local plr = Players.LocalPlayer
+
 	local function notify(text)
 		pcall(function()
 			game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -7565,6 +7799,7 @@ loadDualSpamGui = function()
 			})
 		end)
 	end
+
 	local function sayMsg(msg, hide)
 		if not msg or msg == "" then return end
 		if hide and string.sub(msg, 1, 1) ~= ";" then
@@ -7583,18 +7818,21 @@ loadDualSpamGui = function()
 			end
 		end)
 	end
+
 	local delay1, delay2 = 1, 1
 	local list1, list2 = {}, {}
 	local sel1, sel2 = nil, nil
 	local run1, run2 = false, false
 	local hide1, hide2 = false, false
 	local gen1, gen2 = 0, 0
+
 	local sg = Instance.new("ScreenGui")
 	sg.Name = "TCODualSpamGui"
 	sg.ResetOnSpawn = false
 	sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	pcall(function() sg.Parent = game.CoreGui end)
 	if not sg.Parent then sg.Parent = plr:WaitForChild("PlayerGui") end
+
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(0, 210, 0, 320)
 	frame.Position = UDim2.new(0, 28, 0.5, -160)
@@ -7604,11 +7842,13 @@ loadDualSpamGui = function()
 	frame.ClipsDescendants = true
 	frame.Parent = sg
 	Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 4)
+
 	local titleBar = Instance.new("Frame")
 	titleBar.Size = UDim2.new(1, 0, 0, 26)
 	titleBar.BackgroundColor3 = Color3.fromRGB(36, 36, 42)
 	titleBar.BorderSizePixel = 0
 	titleBar.Parent = frame
+
 	local title = Instance.new("TextLabel")
 	title.Size = UDim2.new(1, -58, 1, 0)
 	title.Position = UDim2.new(0, 8, 0, 0)
@@ -7619,6 +7859,7 @@ loadDualSpamGui = function()
 	title.TextSize = 14
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Parent = titleBar
+
 	local minBtn = Instance.new("TextButton")
 	minBtn.Size = UDim2.new(0, 24, 0, 22)
 	minBtn.Position = UDim2.new(1, -52, 0, 2)
@@ -7629,6 +7870,7 @@ loadDualSpamGui = function()
 	minBtn.TextSize = 16
 	minBtn.Parent = titleBar
 	Instance.new("UICorner", minBtn).CornerRadius = UDim.new(0, 3)
+
 	local closeBtn = Instance.new("TextButton")
 	closeBtn.Size = UDim2.new(0, 24, 0, 22)
 	closeBtn.Position = UDim2.new(1, -26, 0, 2)
@@ -7639,6 +7881,7 @@ loadDualSpamGui = function()
 	closeBtn.TextSize = 14
 	closeBtn.Parent = titleBar
 	Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 3)
+
 	local topResize = Instance.new("TextButton")
 	topResize.Size = UDim2.new(1, 0, 0, 5)
 	topResize.Position = UDim2.new(0, 0, 0, 0)
@@ -7653,6 +7896,7 @@ loadDualSpamGui = function()
 	botResize.Text = ""
 	botResize.ZIndex = 5
 	botResize.Parent = frame
+
 	local resizing, resizeMode, resizeStart, resizeSize, resizePos
 	local function beginResize(mode, input)
 		resizing = true
@@ -7690,6 +7934,7 @@ loadDualSpamGui = function()
 			resizing = false
 		end
 	end)
+
 	closeBtn.MouseButton1Click:Connect(function()
 		run1 = false
 		run2 = false
@@ -7700,12 +7945,14 @@ loadDualSpamGui = function()
 			or (plr:FindFirstChild("PlayerGui") and plr.PlayerGui:FindFirstChild("TCODualSpamMini"))
 		if mini then mini:Destroy() end
 	end)
+
 	local miniGui = Instance.new("ScreenGui")
 	miniGui.Name = "TCODualSpamMini"
 	miniGui.ResetOnSpawn = false
 	miniGui.Enabled = false
 	pcall(function() miniGui.Parent = game.CoreGui end)
 	if not miniGui.Parent then miniGui.Parent = plr:WaitForChild("PlayerGui") end
+
 	local miniBtn = Instance.new("TextButton")
 	miniBtn.Size = UDim2.new(0, 56, 0, 56)
 	miniBtn.Position = UDim2.new(0, 20, 0.55, -28)
@@ -7716,6 +7963,7 @@ loadDualSpamGui = function()
 	miniBtn.TextSize = 16
 	miniBtn.Parent = miniGui
 	Instance.new("UICorner", miniBtn).CornerRadius = UDim.new(0, 6)
+
 	minBtn.MouseButton1Click:Connect(function()
 		frame.Visible = false
 		miniGui.Enabled = true
@@ -7724,6 +7972,7 @@ loadDualSpamGui = function()
 		frame.Visible = true
 		miniGui.Enabled = false
 	end)
+
 	local dragging, dragStart, startPos
 	titleBar.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -7743,6 +7992,7 @@ loadDualSpamGui = function()
 			dragging = false
 		end
 	end)
+
 	local mDragging, mStart, mPos
 	miniBtn.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -7762,6 +8012,7 @@ loadDualSpamGui = function()
 			mDragging = false
 		end
 	end)
+
 	local scroll = Instance.new("ScrollingFrame")
 	scroll.Size = UDim2.new(1, -10, 1, -34)
 	scroll.Position = UDim2.new(0, 5, 0, 28)
@@ -7776,6 +8027,7 @@ loadDualSpamGui = function()
 	layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 		scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
 	end)
+
 	local function addLabel(text)
 		local l = Instance.new("TextLabel")
 		l.Size = UDim2.new(1, -4, 0, 20)
@@ -7787,6 +8039,7 @@ loadDualSpamGui = function()
 		l.TextXAlignment = Enum.TextXAlignment.Left
 		l.Parent = scroll
 	end
+
 	local function addBox(placeholder, callback)
 		local box = Instance.new("TextBox")
 		box.Size = UDim2.new(1, -4, 0, 28)
@@ -7808,6 +8061,7 @@ loadDualSpamGui = function()
 		end)
 		return box
 	end
+
 	local function addBtn(text, callback)
 		local b = Instance.new("TextButton")
 		b.Size = UDim2.new(1, -4, 0, 28)
@@ -7821,6 +8075,7 @@ loadDualSpamGui = function()
 		b.MouseButton1Click:Connect(callback)
 		return b
 	end
+
 	local function addToggle(text, onEnable, onDisable)
 		local on = false
 		local b = Instance.new("TextButton")
@@ -7846,6 +8101,7 @@ loadDualSpamGui = function()
 		end)
 		return b
 	end
+
 	local function makeSelector(labelText, getList, getSel, setSel)
 		addLabel(labelText)
 		local btn = addBtn("(empty) - click to cycle", function()
@@ -7868,6 +8124,7 @@ loadDualSpamGui = function()
 		end)
 		return btn
 	end
+
 	local aName, aPlr, aMsg = nil, nil, ""
 	local aDelay = 0.8
 	local aReset, aRejoin = false, false
@@ -7875,10 +8132,12 @@ loadDualSpamGui = function()
 	local aLifeConns = {}
 	local aSkip = false
 	local aTargetLbl = nil
+
 	local function aClearChars()
 		for _, c in pairs(aCharConns) do pcall(function() c:Disconnect() end) end
 		aCharConns = {}
 	end
+
 	local function aFind(txt)
 		if not txt or txt == "" then return nil end
 		txt = tostring(txt):lower():gsub("^%s+",""):gsub("%s+$","")
@@ -7891,6 +8150,7 @@ loadDualSpamGui = function()
 		end
 		return exact or partial
 	end
+
 	local function aMatchName(plr)
 		if not aName or aName == "" or not plr then return false end
 		local n = aName:lower()
@@ -7899,6 +8159,7 @@ loadDualSpamGui = function()
 			or string.find(plr.Name:lower(), n, 1, true) ~= nil
 			or string.find(plr.DisplayName:lower(), n, 1, true) ~= nil
 	end
+
 	local aEquipEnlighten = false
 	local function aEquipEnlightenInvisible()
 		if not aEquipEnlighten then return end
@@ -7927,6 +8188,7 @@ loadDualSpamGui = function()
 			end
 		end)
 	end
+
 	local function aSay()
 		if not aMsg or aMsg == "" then return end
 		local msg = aMsg
@@ -7940,6 +8202,7 @@ loadDualSpamGui = function()
 		sayMsg(msg, false)
 		notify("Auto said: " .. msg)
 	end
+
 	local function aWaitAliveAndSay(plr)
 		task.spawn(function()
 			local char = plr.Character
@@ -7970,6 +8233,7 @@ loadDualSpamGui = function()
 			end
 		end)
 	end
+
 	local function aHook(plr)
 		if not plr then return end
 		aClearChars()
@@ -7995,9 +8259,11 @@ loadDualSpamGui = function()
 		table.insert(aCharConns, plr.CharacterAdded:Connect(onChar))
 		if plr.Character then onChar(plr.Character) end
 	end
+
 	addLabel("--- Auto say ---")
 	aTargetLbl = addBtn("Target: (none)", function() end)
 	aTargetLbl.TextColor3 = Color3.fromRGB(180, 200, 220)
+
 	addBox("Player name then enter", function(txt)
 		local p = aFind(txt)
 		if p then
@@ -8014,14 +8280,17 @@ loadDualSpamGui = function()
 			notify("Not in server - watching join")
 		end
 	end)
+
 	addBox("Message to say (e.g. freeze Name)", function(txt)
 		aMsg = tostring(txt or "")
 		notify("Msg: " .. aMsg)
 	end)
+
 	addBox("Shared delay (reset + rejoin)", function(txt)
 		local n = tonumber(txt)
 		if n and n >= 0 then aDelay = n notify("Delay: " .. n .. "s (both)") end
 	end)
+
 	addToggle("Say on RESET", function()
 		aReset = true
 		if aPlr then aHook(aPlr) end
@@ -8030,6 +8299,7 @@ loadDualSpamGui = function()
 		aReset = false
 		notify("Reset OFF")
 	end)
+
 	addToggle("Say on REJOIN", function()
 		aRejoin = true
 		notify("Rejoin ON")
@@ -8037,6 +8307,7 @@ loadDualSpamGui = function()
 		aRejoin = false
 		notify("Rejoin OFF")
 	end)
+
 	addToggle("Equip Arkenstone when reset/rejoin", function()
 		aEquipEnlighten = true
 		notify("Arkenstone equip ON (invisible)")
@@ -8044,6 +8315,7 @@ loadDualSpamGui = function()
 		aEquipEnlighten = false
 		notify("Arkenstone equip OFF")
 	end)
+
 	table.insert(aLifeConns, Players.PlayerAdded:Connect(function(plr)
 		if not aRejoin then return end
 		if not aMatchName(plr) then return end
@@ -8056,6 +8328,7 @@ loadDualSpamGui = function()
 		aWaitAliveAndSay(plr)
 		aHook(plr)
 	end))
+
 	table.insert(aLifeConns, Players.PlayerRemoving:Connect(function(plr)
 		if aPlr == plr then
 			aPlr = nil
@@ -8067,6 +8340,7 @@ loadDualSpamGui = function()
 			end)
 		end
 	end))
+
 	addLabel("--- Slot 1 ---")
 	addBox("Slot 1 delay (seconds)", function(txt)
 		local n = tonumber(txt)
@@ -8101,6 +8375,7 @@ loadDualSpamGui = function()
 		gen1 = gen1 + 1
 		notify("Slot 1 OFF")
 	end)
+
 	addLabel("--- Slot 2 ---")
 	addBox("Slot 2 delay (seconds)", function(txt)
 		local n = tonumber(txt)
@@ -8135,6 +8410,7 @@ loadDualSpamGui = function()
 		gen2 = gen2 + 1
 		notify("Slot 2 OFF")
 	end)
+
 	addLabel("--- Both ---")
 	addToggle("Spam BOTH slots", function()
 		run1 = true
@@ -8162,8 +8438,11 @@ loadDualSpamGui = function()
 		gen2 = gen2 + 1
 		notify("BOTH OFF")
 	end)
+
 	notify("2 Commands Spam GUI loaded")
 end
+
+
 dumfix = true
 function listfilesfixed(directory)
 	local s, lf = pcall(function()
@@ -8221,14 +8500,14 @@ function snap(pos,m)
 	local x = math.round(pos.X/m)+2
 	return pos
 end
-childcube = nil
+childcube = nil -- yeah its reversed
 childcube2 = nil
 oldprt = nil
 tp = true
 blocks = {}
 cubehistory = {}
 historynum = 0
-historymax = 900
+historymax = 900 -- fixed (not user-editable)
 cubechild = nil
 toxifybrick = nil
 buildingtoxify = false
@@ -8252,7 +8531,7 @@ if workspace.Bricks:FindFirstChild(localplr.Name) then
 	end
 else
 	cubechild = workspace.Bricks.ChildAdded:Connect(function()
-	end)
+	end) -- literally does nothing, make fun of my code
 end
 function getclosesttopos(pos)
 	local closest = nil
@@ -8276,8 +8555,8 @@ colors["dark pink"] = Color3.fromRGB(160,0,160)
 defaultcolor = Color3.fromRGB(192,192,192)
 buildingexec = nil
 novel = false
-resizewait = 0.7
-buildspeed = 1.0
+resizewait = 0.7 -- default
+buildspeed = 1.0 -- 1.0 = current optimized speed. Higher = faster (lower waits). 0.5 = slower/safer
 normalids = {}
 normalids[Enum.NormalId.Right] = {Vector3.new(1,0,0),"X"}
 normalids[Enum.NormalId.Top] = {Vector3.new(0,1,0),"Y"}
@@ -8309,11 +8588,11 @@ function buildblock(pos,texture,color,bsize,bsizev3,premadebuild,origmaterial,sp
 	local waitPaint = (isSave and 0.08 or 0.2) / spd
 	local waitAnchor = (isSave and 0.35 or 1) / spd
 	local waitSpray = (isSave and 0.25 or 0.5) / spd
-	local waitResize = isSave and math.max(0.06, resizewait * 0.45) or resizewait
+	local waitResize = isSave and math.max(0.06, resizewait * 0.45) or resizewait -- not affected by buildspeed
 	local maxBuildTries = isSave and 90 or 200
 	local maxPaintTries = isSave and 80 or 2000
 	local maxAnchorTries = isSave and 12 or 20
-	local s,e = pcall(function()
+	local s,e = pcall(function() -- this function is called soooo much and errors will stop the whole script so we gotta just bandage it in like 1000 pcall functions
 	local s,e = pcall(function()
 		localplr.Backpack.Build.Parent = localplr.Character
 	end)
@@ -8449,7 +8728,7 @@ function buildblock(pos,texture,color,bsize,bsizev3,premadebuild,origmaterial,sp
 			[5] = color or nil,
 			[6] = "tiles",
 			[7] = ""
-		}
+		}	
 		task.wait()
 		local success,err = pcall(function()
 			localplr.Backpack.Paint.Parent = localplr.Character
@@ -8469,7 +8748,7 @@ function buildblock(pos,texture,color,bsize,bsizev3,premadebuild,origmaterial,sp
 		local oldcolor = childcube.Color
 		highlight.Adornee = childcube
 		c = 0
-		local s,e = pcall(function()
+		local s,e = pcall(function()	
 		repeat
 			c = c + 1
 			if localplr.Character and not localplr.Character:FindFirstChild("Paint") and localplr.Backpack:FindFirstChild("Paint") then
@@ -8627,7 +8906,7 @@ function buildblock(pos,texture,color,bsize,bsizev3,premadebuild,origmaterial,sp
 				or stopped == true or skipblock == true
 				or not childcube or not childcube.Parent
 				or c >= maxTries
-				or stall >= 6
+				or stall >= 6 -- Shape not responding: move on instead of hanging forever
 			novel = false
 		end
 		resizeAxis(Enum.NormalId.Right, "X", bsizev3.X)
@@ -8743,6 +9022,7 @@ lib.maketoggle("Annoy Aura (Dih)", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 spmbl = false
 spmsi = false
 tkill = false
@@ -8760,6 +9040,7 @@ lib.maketoggle("Toxify Aura",grieftab,function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Toxic Kill Aura",grieftab,function(bool)
 	tkill = bool
 	buildingtoxify = false
@@ -8789,10 +9070,12 @@ lib.maketoggle("Toxic Kill Aura",grieftab,function(bool)
 		end
 	end
 end)
+
 function hasDeleteTool()
 	return localplr.Backpack:FindFirstChild("Delete")
 		or (localplr.Character and localplr.Character:FindFirstChild("Delete"))
 end
+
 function refreshDeleteTool()
 	local deleteTool = hasDeleteTool()
 	if not deleteTool then return false end
@@ -8800,6 +9083,7 @@ function refreshDeleteTool()
 	if not char then return false end
 	local hum = char:FindFirstChildOfClass("Humanoid")
 	local backpack = localplr.Backpack
+
 	local heldName = nil
 	for _, t in pairs(char:GetChildren()) do
 		if t:IsA("Tool") and t.Name ~= "Delete" then
@@ -8807,6 +9091,7 @@ function refreshDeleteTool()
 			break
 		end
 	end
+
 	pcall(function()
 		if deleteTool.Parent == char then
 			deleteTool.Parent = backpack
@@ -8829,6 +9114,7 @@ function refreshDeleteTool()
 		local d = char:FindFirstChild("Delete")
 		if d then d.Parent = backpack end
 	end)
+
 	if heldName and hum then
 		local held = backpack:FindFirstChild(heldName)
 		if held then
@@ -8837,9 +9123,11 @@ function refreshDeleteTool()
 	end
 	return true
 end
+
 function refreshDeleteToolEquip()
 	return refreshDeleteTool()
 end
+
 function fixBkit()
 	local char = localplr.Character
 	local backpack = localplr.Backpack
@@ -8847,6 +9135,7 @@ function fixBkit()
 	local hum = char:FindFirstChildOfClass("Humanoid")
 	local rs = game:GetService("RunService")
 	local sg = game:GetService("StarterGui")
+
 	pcall(function()
 		sg:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
 	end)
@@ -8854,6 +9143,7 @@ function fixBkit()
 	pcall(function()
 		sg:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, true)
 	end)
+
 	pcall(function()
 		if hum then hum:UnequipTools() end
 	end)
@@ -8863,6 +9153,7 @@ function fixBkit()
 		end
 	end
 	task.wait(0.05)
+
 	local tools = {}
 	for _, t in pairs(backpack:GetChildren()) do
 		if t:IsA("Tool") then tools[#tools + 1] = t end
@@ -8876,6 +9167,7 @@ function fixBkit()
 			t.Parent = backpack
 		end)
 	end
+
 	pcall(function()
 		if hum then hum:UnequipTools() end
 	end)
@@ -8884,12 +9176,14 @@ function fixBkit()
 			pcall(function() t.Parent = backpack end)
 		end
 	end
+
 	_cachedDeleteTools = {}
 	_cachedDeleteEv = nil
 	_cachedDeleteAt = 0
 	pcall(function()
 		if refreshDeleteCache then refreshDeleteCache() end
 	end)
+
 	local build = backpack:FindFirstChild("Build")
 	if build and hum then
 		pcall(function() hum:EquipTool(build) end)
@@ -8917,6 +9211,7 @@ function findDeleteTools()
 	scan(localplr.Character)
 	return dtools
 end
+
 _dti = 0
 _cachedDeleteTools = {}
 _cachedDeleteEv = nil
@@ -8939,6 +9234,7 @@ function refreshDeleteCache()
 	_cachedDeleteAt = tick()
 	return _cachedDeleteEv ~= nil
 end
+
 local _deleteCursor = 0
 local _deleteLastCharacter = nil
 function fireDelete(part)
@@ -8971,8 +9267,10 @@ function fireDeleteBurst(parts, limit)
 	_deleteCursor = start + math.max(count, 1) - 1
 	return count
 end
+
 _toolRemoteCache = _toolRemoteCache or {}
 _toolRemoteAt = _toolRemoteAt or {}
+
 function findToolAny(toolName)
 	local bag = localplr.Backpack
 	local char = localplr.Character
@@ -8986,9 +9284,11 @@ function findToolAny(toolName)
 	end
 	return nil
 end
+
 function hasToolInInventory(toolName)
 	return findToolAny(toolName) ~= nil
 end
+
 function refreshToolBypass(toolName)
 	local tool = findToolAny(toolName)
 	if not tool then return false end
@@ -8996,6 +9296,7 @@ function refreshToolBypass(toolName)
 	local backpack = localplr.Backpack
 	if not char or not backpack then return false end
 	local hum = char:FindFirstChildOfClass("Humanoid")
+
 	local heldName = nil
 	for _, t in pairs(char:GetChildren()) do
 		if t:IsA("Tool") and t.Name ~= toolName then
@@ -9003,6 +9304,7 @@ function refreshToolBypass(toolName)
 			break
 		end
 	end
+
 	pcall(function()
 		if tool.Parent == char then tool.Parent = backpack end
 	end)
@@ -9019,6 +9321,7 @@ function refreshToolBypass(toolName)
 		local stray = char:FindFirstChild(toolName)
 		if stray then stray.Parent = backpack end
 	end)
+
 	if heldName and hum then
 		local held = backpack:FindFirstChild(heldName)
 		if held then
@@ -9029,6 +9332,7 @@ function refreshToolBypass(toolName)
 	_toolRemoteAt[toolName] = 0
 	return true
 end
+
 function getToolRemote(toolName)
 	local now = tick()
 	if _toolRemoteCache[toolName] and (now - (_toolRemoteAt[toolName] or 0)) < 3 then
@@ -9043,6 +9347,7 @@ function getToolRemote(toolName)
 	_toolRemoteAt[toolName] = now
 	return remote
 end
+
 function fireToolRemote(toolName, ...)
 	local char = localplr.Character
 	local bag = localplr.Backpack
@@ -9087,6 +9392,7 @@ function fireToolRemote(toolName, ...)
 	end)
 	return ok
 end
+
 function withToolSession(toolName, fn)
 	local char = localplr.Character
 	local bag = localplr.Backpack
@@ -9109,6 +9415,7 @@ function withToolSession(toolName, fn)
 	end)
 	return ok
 end
+
 function equipNamedTool(toolName)
 	local t = findToolAny(toolName)
 	if not t then return nil end
@@ -9125,6 +9432,9 @@ function equipNamedTool(toolName)
 	end
 	return findToolAny(toolName)
 end
+
+
+-- OLD fling method (teleport into them + high velocity). returnHome=true returns after.
 function flingWithReturn(targetHRP, durationSec, returnHome)
 	durationSec = durationSec or 5
 	if returnHome == nil then returnHome = true end
@@ -9154,6 +9464,8 @@ function flingWithReturn(targetHRP, durationSec, returnHome)
 		end)
 	end
 end
+
+-- continuous old fling pulse (no return) for durationSec or one frame if nil
 function flingHold(targetHRP, durationSec)
 	durationSec = durationSec or 0
 	local t0 = tick()
@@ -9169,6 +9481,9 @@ function flingHold(targetHRP, durationSec)
 		task.wait()
 	until durationSec <= 0 or (tick() - t0) >= durationSec
 end
+
+-- NEW climb method for kill fling: moderate downward/void push (not sky rocket)
+
 function tcoSoftReturnHome(homeCF)
 	if not homeCF then return end
 	if getgenv()._tcoReturning then return end
@@ -9184,6 +9499,7 @@ function tcoSoftReturnHome(homeCF)
 				my.AssemblyAngularVelocity = Vector3.zero
 				my.CFrame = homeCF
 			end
+			-- sit briefly so you are not stunned / sliding
 			if hum and hum.Health > 0 then
 				hum.Sit = true
 				hum.PlatformStand = false
@@ -9195,6 +9511,7 @@ function tcoSoftReturnHome(homeCF)
 		getgenv()._tcoReturning = false
 	end)
 end
+
 function killFlingHold(targetHRP)
 	pcall(function()
 		local my = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
@@ -9205,13 +9522,16 @@ function killFlingHold(targetHRP)
 				if part:IsA("BasePart") then part.CanCollide = false end
 			end
 		end
+		-- climb-style attach
 		my.CFrame = targetHRP.CFrame * CFrame.new(0, 0, 1)
+		-- not far / not sky high: push down + slight sideways into void
 		local v = Vector3.new((math.random() - 0.5) * 2e3, -8e3 - math.random() * 2e3, (math.random() - 0.5) * 2e3)
 		targetHRP.AssemblyLinearVelocity = v
 		pcall(function() targetHRP.Velocity = v end)
 		my.AssemblyLinearVelocity = v * 0.1
 	end)
 end
+
 function tcoStartBuildAura()
 	getgenv()._tcoBuildAura = true
 	local gen = (getgenv()._tcoBuildAura_gen or 0) + 1
@@ -9227,6 +9547,7 @@ function tcoStartBuildAura()
 						sizeMode = localplr.PlayerGui.Build.Button.Text
 					end
 				end)
+				-- old working build aura: fast scatter around you
 				fireBuildAt(origin + Vector3.new(math.random(-10, 10), -1.5, math.random(-10, 10)), sizeMode)
 			end)
 			task.wait(0.03)
@@ -9237,15 +9558,18 @@ function tcoStopBuildAura()
 	getgenv()._tcoBuildAura = false
 	getgenv()._tcoBuildAura_gen = (getgenv()._tcoBuildAura_gen or 0) + 1
 end
+
 function fireBuildAt(pos, sizeMode)
 	sizeMode = sizeMode or "detailed"
 	if not findToolAny("Build") then return false end
 	return fireToolRemote("Build", workspace.Terrain, Enum.NormalId.Top, pos, sizeMode)
 end
+
 function fireSignAt(pos)
 	if not findToolAny("Sign") then return false end
 	return fireToolRemote("Sign", workspace.Terrain, Enum.NormalId.Top, pos, "normal")
 end
+
 function firePaintPart(part, mode, color)
 	if not part or not part.Parent then return false end
 	local char = localplr.Character
@@ -9284,6 +9608,7 @@ function firePaintPart(part, mode, color)
 		end
 		return true
 	end
+
 	if mode == "black" or mode == "both" or mode == "neon" or mode == "color" then
 		local col = color or Color3.fromRGB(0, 0, 0)
 		local args = {
@@ -9367,6 +9692,7 @@ function findNearestBrick(pos, maxDist)
 	end
 	return best
 end
+
 function paintUntilBlack(part, unanchorToo, tries)
 	tries = tries or 12
 	if not part then return false end
@@ -9388,6 +9714,7 @@ function paintUntilBlack(part, unanchorToo, tries)
 	end
 	return false
 end
+
 function getBuildCenter(folder)
 	if not folder then return nil end
 	local sum = Vector3.new(0, 0, 0)
@@ -9409,6 +9736,7 @@ function getBuildCenter(folder)
 	if n == 0 then return nil end
 	return sum / n
 end
+
 function findBuildFolder(name)
 	if not name or name == "" or name == "(none)" then return nil end
 	local bricks = workspace:FindFirstChild("Bricks")
@@ -9420,6 +9748,7 @@ function findBuildFolder(name)
 	end
 	return nil
 end
+
 function tpToBuild(folder)
 	local center = getBuildCenter(folder)
 	if not center then return false end
@@ -9432,10 +9761,12 @@ function tpToBuild(folder)
 	end)
 	return ok
 end
+
 task.spawn(function()
 	task.wait(0.5)
 	pcall(refreshDeleteTool)
 end)
+
 daurarange = 35
 daurapart = Instance.new("Part")
 daurapart.Shape = Enum.PartType.Ball
@@ -9458,6 +9789,7 @@ filter = OverlapParams.new()
 filter.FilterType = Enum.RaycastFilterType.Include
 filter.MaxParts = 120
 pcall(function() if workspace:FindFirstChild("Bricks") then filter:AddToFilter(workspace.Bricks) end end)
+
 daura = false
 lib.maketoggle("Delete Aura",grieftab,function(bool)
 	daura = bool
@@ -9479,6 +9811,7 @@ lib.maketoggle("Delete Aura",grieftab,function(bool)
 	end
 end)
 dauras = false
+
 ors = true
 coroutine.wrap(function()
 	local lastRefresh = 0
@@ -9498,15 +9831,18 @@ coroutine.wrap(function()
 				local hrp = char:FindFirstChild("HumanoidRootPart")
 				if not hrp then return end
 				if not hasDeleteTool() then return end
+
 				if tick() - lastRefresh > 2 or not _cachedDeleteEv then
 					lastRefresh = tick()
 					pcall(refreshDeleteTool)
 					pcall(refreshDeleteCache)
 				end
+
 				local pos = hrp.Position
 				local range = daurarange or 35
 				daurapart.Position = pos
 				daurapart.Size = Vector3.new(range * 2, range * 2, range * 2)
+
 				local targets = {}
 				local r2 = range * range
 				local bricks = workspace:FindFirstChild("Bricks")
@@ -9530,6 +9866,7 @@ coroutine.wrap(function()
 		end
 	end
 end)()
+
 griefSelName = nil
 griefTargets = {}
 griefRunning = false
@@ -9553,6 +9890,7 @@ function ownersList()
 	if #t == 0 then t[1] = "(none)" end
 	return t
 end
+
 lib.makelabel("--- auras ---", grieftab)
 getgenv()._tcoAuraRange = getgenv()._tcoAuraRange or 35
 lib.maketextbox("Aura range (default 35)", grieftab, function(txt)
@@ -9560,6 +9898,7 @@ lib.maketextbox("Aura range (default 35)", grieftab, function(txt)
 	if n and n > 0 then getgenv()._tcoAuraRange = n end
 end)
 pcall(function() tcoAddModeToggles(grieftab) end)
+
 lib.maketoggle("Sign Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoSignAura", "_tcoSignAura_gen") return end
 	getgenv()._tcoSignAura = true
@@ -9575,6 +9914,8 @@ lib.maketoggle("Sign Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
+
 lib.maketoggle("Build Aura", grieftab, function(bool)
 	if not bool then
 		getgenv()._tcoBuildAura = false
@@ -9583,6 +9924,8 @@ lib.maketoggle("Build Aura", grieftab, function(bool)
 	end
 	tcoStartBuildAura()
 end, false)
+
+
 function auraBump(genKey)
 	getgenv()[genKey] = (getgenv()[genKey] or 0) + 1
 	return getgenv()[genKey]
@@ -9591,10 +9934,12 @@ function auraStop(flag, genKey)
 	getgenv()[flag] = false
 	if genKey then auraBump(genKey) end
 end
+
 getgenv()._tcoUG = getgenv()._tcoUG or false
 getgenv()._tcoSafeMode = getgenv()._tcoSafeMode or false
 getgenv()._tcoInvisMode = getgenv()._tcoInvisMode or false
 getgenv()._tcoModeHomeCF = nil
+
 function tcoChatCmd(msg)
 	pcall(function()
 		local tcs = game:GetService("TextChatService")
@@ -9608,6 +9953,7 @@ function tcoChatCmd(msg)
 		end
 	end)
 end
+
 function tcoBypassArken()
 	pcall(function()
 		local name = "The Arkenstone"
@@ -9627,6 +9973,7 @@ function tcoBypassArken()
 		end)
 	end)
 end
+
 function tcoIsRiskyTarget(hrp)
 	if not hrp then return true end
 	local pos = hrp.Position
@@ -9644,12 +9991,14 @@ function tcoIsRiskyTarget(hrp)
 	end
 	return false
 end
+
 function tcoSaveHome()
 	local h = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
 	if h and not getgenv()._tcoModeHomeCF then
 		getgenv()._tcoModeHomeCF = h.CFrame
 	end
 end
+
 function tcoRestoreHome()
 	local h = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
 	local cf = getgenv()._tcoModeHomeCF
@@ -9661,6 +10010,7 @@ function tcoRestoreHome()
 	end
 	getgenv()._tcoModeHomeCF = nil
 end
+
 function tcoApplyTargetMode(targetHRP)
 	if not targetHRP then return false end
 	local my = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
@@ -9688,6 +10038,7 @@ function tcoApplyTargetMode(targetHRP)
 	end
 	return true
 end
+
 function tcoStopTargetMode()
 	local wasInvis = getgenv()._tcoInvisMode
 	tcoRestoreHome()
@@ -9700,6 +10051,7 @@ function tcoStopTargetMode()
 		end)
 	end
 end
+
 function tcoAddModeToggles(tab)
 	lib.makelabel("--- aura target modes ---", tab)
 	lib.maketoggle("Safe mode (abort if flying/climbing)", tab, function(bool)
@@ -9741,11 +10093,14 @@ function tcoAddModeToggles(tab)
 		end
 	end, getgenv()._tcoInvisMode and true or false)
 end
+
 function getAuraOrigin()
+	-- grief / self auras always use local player (never nearest / blame target)
 	local ch = localplr.Character
 	local h = ch and ch:FindFirstChild("HumanoidRootPart")
 	return h and h.Position or nil
 end
+
 function tcoInstantNoclipUnder(targetPos)
 	if not targetPos then return end
 	local char = localplr.Character
@@ -9783,6 +10138,7 @@ function tcoInstantNoclipUnder(targetPos)
 		end
 	end)
 end
+
 function tcoClearUnderHold()
 	pcall(function()
 		local char = localplr.Character
@@ -9797,16 +10153,21 @@ function tcoClearUnderHold()
 		end
 	end)
 end
+
+
 getgenv()._tcoUGSpeed = getgenv()._tcoUGSpeed or 40
 getgenv()._tcoUGMaxY = getgenv()._tcoUGMaxY or 0
+
 getgenv()._tcoStartUGControl = function()
 	getgenv()._tcoStopUGControl()
 	local char = localplr.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
 	if not hrp or not hum then return end
+
 	getgenv()._tcoUGHomeCF = hrp.CFrame
 	getgenv()._tcoUGControl = true
+
 	local maxY = tonumber(getgenv()._tcoUGMaxY) or 0
 	local hoverY = maxY - 0.1
 	local startPos = Vector3.new(hrp.Position.X, hoverY, hrp.Position.Z)
@@ -9819,9 +10180,11 @@ getgenv()._tcoStartUGControl = function()
 		hum.AutoRotate = false
 		hum:ChangeState(Enum.HumanoidStateType.Physics)
 	end)
+
 	local keys = {W=false,A=false,S=false,D=false}
 	local UIS = game:GetService("UserInputService")
 	local conns = {}
+
 	local gui = Instance.new("ScreenGui")
 	gui.Name = "TCOUGControl"
 	gui.ResetOnSpawn = false
@@ -9851,6 +10214,7 @@ getgenv()._tcoStartUGControl = function()
 	hold(mbtn("A", UDim2.new(1, -200, 1, -120)), "A")
 	hold(mbtn("S", UDim2.new(1, -140, 1, -120)), "S")
 	hold(mbtn("D", UDim2.new(1, -80, 1, -120)), "D")
+
 	table.insert(conns, UIS.InputBegan:Connect(function(input, gp)
 		if gp then return end
 		local k = input.KeyCode
@@ -9868,6 +10232,7 @@ getgenv()._tcoStartUGControl = function()
 		elseif k == Enum.KeyCode.D then keys.D = false
 		end
 	end))
+
 	table.insert(conns, game:GetService("RunService").RenderStepped:Connect(function(dt)
 		if not getgenv()._tcoUGControl then return end
 		local c = localplr.Character
@@ -9905,8 +10270,10 @@ getgenv()._tcoStartUGControl = function()
 		h.AssemblyLinearVelocity = Vector3.zero
 		h.AssemblyAngularVelocity = Vector3.zero
 	end))
+
 	getgenv()._tcoUGConns = conns
 end
+
 getgenv()._tcoStopUGControl = function()
 	getgenv()._tcoUGControl = false
 	local conns = getgenv()._tcoUGConns
@@ -9935,6 +10302,7 @@ getgenv()._tcoStopUGControl = function()
 	end)
 	getgenv()._tcoUGHomeCF = nil
 end
+
 local _paintCursor = 0
 local _paintLastPulse = 0
 local _paintLastMode = nil
@@ -9964,6 +10332,7 @@ function paintAround(mode, color, centerPos, range, stopFlag, stopGenKey)
 	end
 	if stopFlag and getgenv()[stopFlag] == false then return 0 end
 	if stopGenKey and getgenv()[stopGenKey] and stopFlag then
+		-- caller passes matching gen via getgenv()[stopFlag.."_check"]
 	end
 	if not findToolAny("Paint") then return 0 end
 	local now = tick()
@@ -9974,12 +10343,14 @@ function paintAround(mode, color, centerPos, range, stopFlag, stopGenKey)
 		if getgenv()[flag] then activeAuras = activeAuras + 1 end
 	end
 	if stopFlag and not stopFlagListed and getgenv()[stopFlag] then activeAuras = activeAuras + 1 end
+	-- One shared scheduler prevents stacked paint auras from flooding the client.
 	local pulseGap = activeAuras > 1 and 0.12 or 0.08
 	local modeKey = stopFlag or tostring(mode)
 	if now - _paintLastPulse < pulseGap then return 0 end
 	if activeAuras > 1 and _paintLastMode == modeKey then return 0 end
 	_paintLastPulse = now
 	_paintLastMode = modeKey
+
 	local bricks = workspace:FindFirstChild("Bricks")
 	if not bricks then return 0 end
 	local r2 = range * range
@@ -10040,6 +10411,7 @@ function paintAround(mode, color, centerPos, range, stopFlag, stopGenKey)
 	elseif mode == "toxic" then
 		col = col or Color3.fromRGB(0,255,0)
 	end
+	-- game uses lowercase material names: neon, wood, metal, ice, glass, plastic, anchor, toxic
 	local n = 0
 	local maxN = activeAuras > 1 and 2 or 4
 	local startIdx = (_paintCursor % #list) + 1
@@ -10091,6 +10463,8 @@ function paintAround(mode, color, centerPos, range, stopFlag, stopGenKey)
 	_paintCursor = startIdx + n
 	return n
 end
+
+
 lib.maketoggle("Unanchor Aura (Paint)", grieftab, function(bool)
 	if not bool then auraStop("_tcoUnanchorAura", "_tcoUnanchorAura_gen") return end
 	getgenv()._tcoUnanchorAura = true
@@ -10106,6 +10480,7 @@ lib.maketoggle("Unanchor Aura (Paint)", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Black Neon Aura (Paint)", grieftab, function(bool)
 	if not bool then auraStop("_tcoBlackAura", "_tcoBlackAura_gen") return end
 	getgenv()._tcoBlackAura = true
@@ -10121,6 +10496,7 @@ lib.maketoggle("Black Neon Aura (Paint)", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("White Plastic Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoWhiteAura", "_tcoWhiteAura_gen") return end
 	getgenv()._tcoWhiteAura = true
@@ -10136,6 +10512,7 @@ lib.maketoggle("White Plastic Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Rainbow Neon Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoRainbowAura", "_tcoRainbowAura_gen") return end
 	getgenv()._tcoRainbowAura = true
@@ -10154,6 +10531,7 @@ lib.maketoggle("Rainbow Neon Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("ForceField Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoFFAura", "_tcoFFAura_gen") return end
 	getgenv()._tcoFFAura = true
@@ -10169,6 +10547,7 @@ lib.maketoggle("ForceField Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Glass Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoGlassAura", "_tcoGlassAura_gen") return end
 	getgenv()._tcoGlassAura = true
@@ -10184,6 +10563,7 @@ lib.maketoggle("Glass Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Metal Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoMetalAura", "_tcoMetalAura_gen") return end
 	getgenv()._tcoMetalAura = true
@@ -10198,6 +10578,7 @@ lib.maketoggle("Metal Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Ice Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoIceAura", "_tcoIceAura_gen") return end
 	getgenv()._tcoIceAura = true
@@ -10212,6 +10593,7 @@ lib.maketoggle("Ice Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Wood Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoWoodAura", "_tcoWoodAura_gen") return end
 	getgenv()._tcoWoodAura = true
@@ -10226,6 +10608,7 @@ lib.maketoggle("Wood Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Tiny Blocks Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoTinyBlocks", "_tcoTinyBlocks_gen") return end
 	getgenv()._tcoTinyBlocks = true
@@ -10243,6 +10626,7 @@ lib.maketoggle("Tiny Blocks Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Tiny Yellow Neon Blocks Aura", grieftab, function(bool)
 	if not bool then
 		auraStop("_tcoYellowTiny", "_tcoYellowTiny_gen")
@@ -10256,6 +10640,7 @@ lib.maketoggle("Tiny Yellow Neon Blocks Aura", grieftab, function(bool)
 			pcall(function()
 				local origin = getAuraOrigin()
 				if not origin then return end
+				-- toxify-style: make a yellow neon template brick then stamp it nearby
 				if not getgenv()._tcoYellowBrick or not getgenv()._tcoYellowBrick.Parent then
 					getgenv()._tcoBuildingYellow = true
 					local opos = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart") and localplr.Character.HumanoidRootPart.CFrame
@@ -10288,12 +10673,14 @@ lib.maketoggle("Tiny Yellow Neon Blocks Aura", grieftab, function(bool)
 						end
 					end
 				end
+				-- material + unanchor like working unanchor path
 				paintAround("yellow_unanchor", Color3.fromRGB(255,255,0), origin, getgenv()._tcoAuraRange or 35, "_tcoYellowTiny")
 			end)
 			task.wait(0.06)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Floor Spam Aura", grieftab, function(bool)
 	if not bool then auraStop("_tcoFloorAura", "_tcoFloorAura_gen") return end
 	getgenv()._tcoFloorAura = true
@@ -10314,6 +10701,7 @@ lib.maketoggle("Floor Spam Aura", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.maketoggle("Build Trail", grieftab, function(bool)
 	if not bool then auraStop("_tcoCageAura", "_tcoCageAura_gen") return end
 	getgenv()._tcoCageAura = true
@@ -10338,6 +10726,9 @@ lib.maketoggle("Build Trail", grieftab, function(bool)
 		end
 	end)
 end, false)
+
+
+
 lib.makelabel("--- Disable Bkit ---", grieftab)
 getgenv()._tcoDisableBkit = getgenv()._tcoDisableBkit or {}
 local function bkitPlayerList()
@@ -10512,6 +10903,7 @@ getgenv()._tcoStopDisableBkit = function()
 	end
 	getgenv()._tcoDisableBkitConns = nil
 end
+
 lib.makebutton("Select ALL for disable bkit", grieftab, function()
 	getgenv()._tcoBkitTargets = {}
 	for _, p in pairs(game.Players:GetPlayers()) do
@@ -10552,6 +10944,7 @@ lib.maketoggle("Disable Bkit (delete NEW blocks only)", grieftab, function(bool)
 		game:GetService("StarterGui"):SetCore("SendNotification",{Title="Bkit",Text="Blocking new blocks: "..msg,Duration=2})
 	end)
 end, false)
+
 lib.makelabel("--- targeted grief ---", grieftab)
 gdrop = lib.makedropdown("Select builder", grieftab, ownersList(), function(sel)
 	if sel and sel ~= "(none)" then
@@ -10599,6 +10992,7 @@ lib.makebutton("Highlight selected build", grieftab, function()
 	h.Parent = folder
 	griefHL = h
 end)
+
 lib.makebutton("Add selected to targets", grieftab, function()
 	if griefSelName and griefSelName ~= "(none)" then
 		griefTargets[griefSelName] = true
@@ -10611,6 +11005,7 @@ lib.makebutton("Add selected to targets", grieftab, function()
 		end)
 	end
 end)
+
 lib.makebutton("Select all builders", grieftab, function()
 	local list = ownersList()
 	local n = 0
@@ -10627,12 +11022,14 @@ lib.makebutton("Select all builders", grieftab, function()
 		game:GetService("StarterGui"):SetCore("SendNotification",{Title="Grief",Text="Selected all: "..n.." builders (including Disable Bkit)",Duration=2})
 	end)
 end)
+
 lib.makebutton("Clear targets", grieftab, function()
 	griefTargets = {}
 	pcall(function()
 		game:GetService("StarterGui"):SetCore("SendNotification",{Title="Grief",Text="Targets cleared",Duration=2})
 	end)
 end)
+
 lib.makebutton("Show target count", grieftab, function()
 	local c = 0
 	local names = {}
@@ -10647,6 +11044,7 @@ lib.makebutton("Show target count", grieftab, function()
 		})
 	end)
 end)
+
 function wipeBuildFolder(folder)
 	if not folder then return 0 end
 	local parts = {}
@@ -10659,6 +11057,7 @@ function wipeBuildFolder(folder)
 	fireDeleteBurst(parts)
 	return #parts
 end
+
 lib.makebutton("Wipe selected once", grieftab, function()
 	if not griefSelName or griefSelName == "(none)" then
 		pcall(function()
@@ -10688,6 +11087,7 @@ lib.makebutton("Wipe selected once", grieftab, function()
 		_griefOnce = false
 	end)
 end)
+
 lib.makebutton("Select nearest build", grieftab, function()
 	pcall(function()
 		local hrp = localplr.Character and localplr.Character:FindFirstChild("HumanoidRootPart")
@@ -10717,6 +11117,7 @@ lib.makebutton("Select nearest build", grieftab, function()
 		end
 	end)
 end)
+
 lib.maketoggle("Start griefing targets", grieftab, function(bool)
 	griefRunning = bool
 	if not bool then return end
@@ -10766,6 +11167,7 @@ lib.maketoggle("Start griefing targets", grieftab, function(bool)
 		end
 	end)
 end, false)
+
 lib.makebutton("Refresh Delete bypass now", grieftab, function()
 	local ok = refreshDeleteTool() or refreshDeleteToolEquip()
 	pcall(refreshDeleteCache)
@@ -10777,6 +11179,7 @@ lib.makebutton("Refresh Delete bypass now", grieftab, function()
 		})
 	end)
 end)
+
 lib.makebutton("Fix Bkit (tools)", grieftab, function()
 	local ok = pcall(fixBkit)
 	pcall(function()
@@ -10787,6 +11190,7 @@ lib.makebutton("Fix Bkit (tools)", grieftab, function()
 		})
 	end)
 end)
+
 sblock = nil
 spmsb = false
 side = Enum.NormalId.Top
@@ -10806,6 +11210,7 @@ uistroke.Thickness = -1
 uistroke.Parent = ssboxframe
 oss = false
 ss = true
+
 lib.makebutton("Stop Building",bsaltab,function()
 	stopped = true
 end)
@@ -10818,7 +11223,7 @@ savebuildname = "Untitled"
 savebuildnames = {}
 textbox = nil
 textbox = lib.maketextbox("Set Build Name",bsaltab,function(txt)
-	txt = validate(txt)
+	txt = validate(txt) -- freaking hooligans bro
 	savebuildname = txt
 	textbox.Text = ""
 	textbox.PlaceholderText = "Successfully Named Build"
@@ -10946,6 +11351,32 @@ function createpartrepl(pos,bsize,col,mat,transp,anch,collide,sprays)
 	p.Parent = workspace
 	return p
 end
+--[[
+smooth = SmoothPlastic
+plastic = Plastic
+tiles = CeramicTiles
+bricks = Brick
+planks = WoodPlanks
+ice = Ice
+grass = Grass
+sand = Sand
+snow = Snow
+glass = Glass
+wood = Wood
+stone = Slate
+pebble = Pebble
+marble = Marble
+granite = Granite
+steel = DiamondPlate
+metal = Metal
+asphalt = Asphalt
+concrete = Concrete
+pavement = Pavement
+anchor = Anchored = false/true
+collide = CanCollide = false/true
+spray = SurfaceGui, Face = NormalId, Inside: Image.Image = blank if not exist, Label.Text = spray input if image not exist (image override if image is valid)
+neon = Neon
+toxic = Neon]]
 materials = {}
 materials[Enum.Material.SmoothPlastic] = "smooth"
 materials[Enum.Material.Plastic] = "plastic"
@@ -10972,6 +11403,7 @@ swappedmaterials = {}
 for i,v in pairs(materials) do
 	swappedmaterials[v] = i
 end
+
 function tcoEnsureBuildFolder()
 	pcall(function()
 		if typeof(makefolder) == "function" then
@@ -11067,6 +11499,7 @@ function tcoWriteBuildSave(builddata, label)
 	end)
 	return true
 end
+
 function saveblock(bl)
 	local blockdata = {}
 	if bl:IsA("BasePart") then
@@ -11088,6 +11521,11 @@ function saveblock(bl)
 			blockdata.s = {bl.Size.X,bl.Size.Y,bl.Size.Z}
 		else
 		end
+--[[
+		if bl.Material == Enum.Material. then
+			blockdata.mat = ""
+		end
+]]
 		blockdata.m = materials[bl.Material]
 		blockdata.o = bl.Material.Name
 		local isToxic = false
@@ -11392,12 +11830,14 @@ function confirmplacebuild()
 	stopped = false
 	if oldprt then oldprt:Destroy() oldprt = nil end
 	clearmovepreview()
+
 	local raw = movepos - origin
 	local delta = Vector3.new(
 		math.round(raw.X / mult) * mult,
 		math.round(raw.Y / mult) * mult,
 		math.round(raw.Z / mult) * mult
 	)
+
 	for i,v in pairs(build) do
 		if stopped == true then break end
 		local posses = (v.p or v.pos)
@@ -11423,6 +11863,7 @@ function confirmplacebuild()
 	stopped = false
 	starterui:SetCore("SendNotification",{Title="Move Build",Text="Finished placing build!",Duration=3})
 end
+
 function permanentsavebuild()
 	if not selectedbuild or not selectedbuild[2] then
 		starterui:SetCore("SendNotification",{Title="Permanent Save",Text="Select a saved build first!",Duration=3})
@@ -11678,6 +12119,7 @@ lib.makebutton("Save Player Build",bsaltab,function()
 	end
 	tcoWriteBuildSave(builddata, "Player build saved")
 end)
+
 lib.makelabel("loading/deleting builds",bsaltab)
 builddropdown = lib.makedropdown("Saved Builds",bsaltab,{"(loading...)"},function(sel)
 	if not sel or sel == "" or sel == "(no saves yet)" or sel == "(loading...)" then
@@ -11786,6 +12228,7 @@ function optimizebuilds()
 		if ok then updatedropdown() end
 	end
 end
+
 lib.makelabel("extra settings/display build",bsaltab)
 offsetpart = Instance.new("Part")
 offsetpart.Shape = Enum.PartType.Ball
@@ -11861,6 +12304,8 @@ lib.maketextbox("Build Speed (e.g. 1.0 / 1.5 / 2.0)",buildtab,function(txt)
 	end
 end)
 buildspeedlabel = lib.makelabel("Build Speed: 1.0",buildtab)
+
+
 resizewaitlabel = lib.makelabel("Resize Wait: 0.7",buildtab)
 updatedropdown()
 lib.makebutton("Copy random gear",geartab,function()
@@ -11868,6 +12313,7 @@ lib.makebutton("Copy random gear",geartab,function()
 	local id = ids[math.random(1, #ids)]
 	pcall(function() setclipboard(tostring(id)) end)
 end)
+
 lib.makelabel("Pressing 'say' will not make you say to everyone, you say it privately",geartab)
 lib.makelabel("Doing the say/copy will say/copy the gear id, not the gear name",geartab)
 currgears = {}
@@ -11892,7 +12338,7 @@ lib.maketextbox("Put gear id with what you enter",geartab,function(txt)
 end)
 chat = nil
 s,e = pcall(function()
-	chat = nil
+	chat = nil--require(game:GetService("Players").LocalPlayer:WaitForChild("PlayerScripts"):WaitForChild("ChatScript"):WaitForChild("ChatMain"))
 end)
 function say(text,channel)
 	local msg = tostring(text or "")
@@ -12246,29 +12692,31 @@ onrender = game:GetService("RunService").Heartbeat:Connect(function()
 		localplr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
 	end
 end)
-griefWhitelist = {}
+griefWhitelist = {} -- [userId] = true
 detectDelete = false
 detectPaint = false
 detectSpam = false
 detectExploit = false
-deleteMinBlocks = 5
-deleteTimeWindow = 3
-paintMinBlocks = 5
-paintTimeWindow = 3
-spamMinBlocks = 50
-deleteTrack = {}
-paintTrack = {}
-griefViewing = nil
+deleteMinBlocks = 5 -- min deletes of others' blocks before flag
+deleteTimeWindow = 3 -- seconds window for those deletes
+paintMinBlocks = 5 -- min paints on others' blocks before flag
+paintTimeWindow = 3 -- seconds window for those paints
+spamMinBlocks = 50 -- min places in 5s before flag
+deleteTrack = {} -- unused legacy
+paintTrack = {} -- unused legacy
+griefViewing = nil -- player being viewed
 griefGui = nil
 griefConns = {}
-placeCounts = {}
-deleteCounts = {}
-paintCounts = {}
+placeCounts = {} -- [userId] = {times}
+deleteCounts = {} -- [userId] = {times}  -- timestamps of deletes on OTHER people's builds
+paintCounts = {} -- [userId] = {times}  -- timestamps of paints on OTHER people's builds
 lastPaintCheck = {}
+
 function isGriefWhitelisted(plr)
 	if not plr then return false end
 	return griefWhitelist[plr.UserId] == true
 end
+
 function stopGriefView()
 	if griefGui then
 		griefGui:Destroy()
@@ -12281,9 +12729,10 @@ function stopGriefView()
 		end
 	end)
 end
+
 function startGriefView(plr, reason)
 	if not plr or isGriefWhitelisted(plr) then return end
-	if griefViewing == plr and griefGui then return end
+	if griefViewing == plr and griefGui then return end -- already showing for them
 	stopGriefView()
 	griefViewing = plr
 	pcall(function()
@@ -12297,6 +12746,7 @@ function startGriefView(plr, reason)
 	pcall(function() sg.Parent = game.CoreGui end)
 	if not sg.Parent then sg.Parent = localplr:WaitForChild("PlayerGui") end
 	griefGui = sg
+
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(0, 260, 0, 340)
 	frame.Position = UDim2.new(1, -280, 0.5, -170)
@@ -12306,6 +12756,7 @@ function startGriefView(plr, reason)
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(0, 10)
 	corner.Parent = frame
+
 	local title = Instance.new("TextLabel")
 	title.Size = UDim2.new(1, -10, 0, 50)
 	title.Position = UDim2.new(0, 5, 0, 5)
@@ -12315,6 +12766,7 @@ function startGriefView(plr, reason)
 	title.TextScaled = true
 	title.Font = Enum.Font.GothamBold
 	title.Parent = frame
+
 	local function makeBtn(text, y, color, cb)
 		local b = Instance.new("TextButton")
 		b.Size = UDim2.new(1, -20, 0, 32)
@@ -12331,6 +12783,7 @@ function startGriefView(plr, reason)
 		b.MouseButton1Click:Connect(cb)
 		return b
 	end
+
 	makeBtn("FLING (5s)", 60, Color3.fromRGB(180, 40, 40), function()
 		coroutine.wrap(function()
 			local myChar = localplr.Character
@@ -12375,6 +12828,7 @@ function startGriefView(plr, reason)
 			end)
 		end)()
 	end)
+
 	makeBtn("ALARM (chat)", 98, Color3.fromRGB(180, 120, 30), function()
 		local msg = (plr.DisplayName or plr.Name).." is griefing! ("..(reason or "grief")..")"
 		coroutine.wrap(function()
@@ -12383,6 +12837,7 @@ function startGriefView(plr, reason)
 			end)
 		end)()
 	end)
+
 	makeBtn("freeze", 136, Color3.fromRGB(50, 90, 160), function()
 		say("freeze "..plr.Name, "system")
 	end)
@@ -12395,9 +12850,11 @@ function startGriefView(plr, reason)
 	makeBtn("glitch", 250, Color3.fromRGB(50, 90, 160), function()
 		say("glitch "..plr.Name, "system")
 	end)
+
 	makeBtn("STOP VIEWING", 292, Color3.fromRGB(60, 60, 70), function()
 		stopGriefView()
 	end)
+
 	pcall(function()
 		starterui:SetCore("SendNotification",{
 			Title = "Grief Detected",
@@ -12406,11 +12863,13 @@ function startGriefView(plr, reason)
 		})
 	end)
 end
+
 function flagGriefer(plr, reason)
 	if not plr or plr == localplr then return end
 	if isGriefWhitelisted(plr) then return end
 	startGriefView(plr, reason)
 end
+
 function onBrickAdded(folder, child)
 	if not child:IsA("BasePart") then return end
 	local owner = game.Players:FindFirstChild(folder.Name)
@@ -12429,15 +12888,18 @@ function onBrickAdded(folder, child)
 		placeCounts[owner.UserId] = {}
 	end
 end
+
 function onBrickRemoved(folder, child)
 	if not child:IsA("BasePart") then return end
 	if not (detectDelete or detectExploit) then return end
 	local victimName = folder.Name
 	local victimPlr = game.Players:FindFirstChild(victimName)
 	if not victimPlr then return end
+
 	local now = tick()
 	local blockPos = nil
 	pcall(function() blockPos = child.Position end)
+
 	local best, bestScore = nil, -1
 	for _, plr in ipairs(game.Players:GetPlayers()) do
 		if plr ~= victimPlr and not isGriefWhitelisted(plr) then
@@ -12461,7 +12923,7 @@ function onBrickRemoved(folder, child)
 					elseif dist < 60 then
 						score = score + 15
 					elseif dist > 120 and not hasDelChar then
-						score = score - 20
+						score = score - 20 -- far + only backpack = weak
 					end
 				end
 			end
@@ -12471,8 +12933,10 @@ function onBrickRemoved(folder, child)
 			end
 		end
 	end
+
 	if not best or bestScore < 25 then return end
 	if best.Name == victimName then return end
+
 	deleteCounts[best.UserId] = deleteCounts[best.UserId] or {}
 	table.insert(deleteCounts[best.UserId], now)
 	local window = deleteTimeWindow or 3
@@ -12481,6 +12945,7 @@ function onBrickRemoved(folder, child)
 		if now - tm <= window then table.insert(kept, tm) end
 	end
 	deleteCounts[best.UserId] = kept
+
 	if detectDelete and #kept >= (deleteMinBlocks or 5) then
 		flagGriefer(best, "deleted "..#kept.." of "..victimName.."'s blocks in "..tostring(window).."s")
 		deleteCounts[best.UserId] = {}
@@ -12490,6 +12955,7 @@ function onBrickRemoved(folder, child)
 		deleteCounts[best.UserId] = {}
 	end
 end
+
 function hookBrickFolder(folder)
 	if not folder or griefConns[folder] then return end
 	griefConns[folder] = {
@@ -12497,6 +12963,7 @@ function hookBrickFolder(folder)
 		folder.ChildRemoved:Connect(function(c) onBrickRemoved(folder, c) end),
 	}
 end
+
 function hookAllBricks()
 	for _,folder in ipairs(workspace.Bricks:GetChildren()) do
 		if folder:IsA("Model") or folder:IsA("Folder") then
@@ -12510,6 +12977,7 @@ function hookAllBricks()
 		end)
 	end
 end
+
 function startPaintWatch()
 	if griefConns["_paint"] then return end
 	griefConns["_paint"] = true
@@ -12579,6 +13047,7 @@ function startPaintWatch()
 		griefConns["_paint"] = nil
 	end)()
 end
+
 function refreshDetections()
 	if detectDelete or detectSpam or detectExploit or detectPaint then
 		hookAllBricks()
@@ -12587,6 +13056,7 @@ function refreshDetections()
 		startPaintWatch()
 	end
 end
+
 lib.makelabel("--- Join alerts ---", scripttab)
 getgenv()._tcoCfg = getgenv()._tcoCfg or {}
 lib.maketoggle("Say hi when someone joins", scripttab, function(bool)
@@ -12613,6 +13083,7 @@ lib.maketextbox("Join command ({name})", scripttab, function(txt)
 		if getgenv()._tcoSaveCfg then getgenv()._tcoSaveCfg() end
 	end
 end)
+
 task.spawn(function()
 	local function chatMsg(msg)
 		msg = tostring(msg or "")
@@ -12667,9 +13138,10 @@ task.spawn(function()
 			end)
 		end
 	end
-	for _, p in pairs(game.Players:GetPlayers()) do end
+	for _, p in pairs(game.Players:GetPlayers()) do end -- only new joins
 	game.Players.PlayerAdded:Connect(onJoin)
 end)
+
 lib.makelabel("Grief Detection - whitelist players so they are ignored",scripttab)
 lib.makebutton("Detect delete blocks grief",scripttab,function()
 	detectDelete = not detectDelete
@@ -12742,6 +13214,7 @@ lib.makebutton("Turn all detections OFF",scripttab,function()
 	stopGriefView()
 	starterui:SetCore("SendNotification",{Title="Grief Detection",Text="ALL OFF",Duration=3})
 end)
+
 lib.makelabel("Whitelist (name or display name)",scripttab)
 lib.maketextbox("Whitelist player",scripttab,function(txt)
 	if not txt or txt == "" then return end
@@ -12786,6 +13259,7 @@ end)
 lib.makebutton("Stop viewing (manual)",scripttab,function()
 	stopGriefView()
 end)
+
 function clearclogs(amt)
 	for i=1,amt do
 		coroutine.wrap(function()
@@ -12794,7 +13268,15 @@ function clearclogs(amt)
 	end
 end
 ccol = false
+
+
 commands = {}
+
+
+
+
+
+
 function loadAntiGui()
 	local existing = game.CoreGui:FindFirstChild("TCOAntiGui")
 		or (game.Players.LocalPlayer:FindFirstChild("PlayerGui")
@@ -12804,9 +13286,11 @@ function loadAntiGui()
 		or (game.Players.LocalPlayer:FindFirstChild("PlayerGui")
 			and game.Players.LocalPlayer.PlayerGui:FindFirstChild("TCOAntiMini"))
 	if miniOld then miniOld:Destroy() end
+
 	local Players = game:GetService("Players")
 	local UIS = game:GetService("UserInputService")
 	local plr = Players.LocalPlayer
+
 	local function notify(text)
 		pcall(function()
 			game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -12816,6 +13300,7 @@ function loadAntiGui()
 			})
 		end)
 	end
+
 	local function sayCmd(msg)
 		pcall(function()
 			local tcs = game:GetService("TextChatService")
@@ -12836,6 +13321,7 @@ function loadAntiGui()
 			game:GetService("Players"):Chat(msg)
 		end)
 	end
+
 	local function getChar()
 		return plr.Character
 	end
@@ -12847,6 +13333,7 @@ function loadAntiGui()
 		local c = getChar()
 		return c and c:FindFirstChildOfClass("Humanoid")
 	end
+
 	local gen = {}
 	local function startLoop(key, interval, fn)
 		gen[key] = (gen[key] or 0) + 1
@@ -12861,15 +13348,18 @@ function loadAntiGui()
 	local function stopLoop(key)
 		gen[key] = (gen[key] or 0) + 1
 	end
+
 	local states = {}
 	local autoEnlightenConn = nil
 	local enlightenLoopGen = 0
+
 	local sg = Instance.new("ScreenGui")
 	sg.Name = "TCOAntiGui"
 	sg.ResetOnSpawn = false
 	sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	pcall(function() sg.Parent = game.CoreGui end)
 	if not sg.Parent then sg.Parent = plr:WaitForChild("PlayerGui") end
+
 	local frame = Instance.new("Frame")
 	frame.Name = "Main"
 	frame.Size = UDim2.new(0, 200, 0, 300)
@@ -12880,11 +13370,13 @@ function loadAntiGui()
 	frame.ClipsDescendants = true
 	frame.Parent = sg
 	Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 4)
+
 	local titleBar = Instance.new("Frame")
 	titleBar.Size = UDim2.new(1, 0, 0, 26)
 	titleBar.BackgroundColor3 = Color3.fromRGB(36, 36, 42)
 	titleBar.BorderSizePixel = 0
 	titleBar.Parent = frame
+
 	local title = Instance.new("TextLabel")
 	title.Size = UDim2.new(1, -58, 1, 0)
 	title.Position = UDim2.new(0, 8, 0, 0)
@@ -12895,6 +13387,7 @@ function loadAntiGui()
 	title.TextSize = 14
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Parent = titleBar
+
 	local minBtn = Instance.new("TextButton")
 	minBtn.Size = UDim2.new(0, 24, 0, 22)
 	minBtn.Position = UDim2.new(1, -52, 0, 2)
@@ -12905,6 +13398,7 @@ function loadAntiGui()
 	minBtn.TextSize = 16
 	minBtn.Parent = titleBar
 	Instance.new("UICorner", minBtn).CornerRadius = UDim.new(0, 3)
+
 	local closeBtn = Instance.new("TextButton")
 	closeBtn.Size = UDim2.new(0, 24, 0, 22)
 	closeBtn.Position = UDim2.new(1, -26, 0, 2)
@@ -12915,6 +13409,7 @@ function loadAntiGui()
 	closeBtn.TextSize = 14
 	closeBtn.Parent = titleBar
 	Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(0, 3)
+
 	local topResize = Instance.new("TextButton")
 	topResize.Size = UDim2.new(1, 0, 0, 5)
 	topResize.Position = UDim2.new(0, 0, 0, 0)
@@ -12929,6 +13424,7 @@ function loadAntiGui()
 	botResize.Text = ""
 	botResize.ZIndex = 5
 	botResize.Parent = frame
+
 	local resizing, resizeMode, resizeStart, resizeSize, resizePos
 	local function beginResize(mode, input)
 		resizing = true
@@ -12966,6 +13462,7 @@ function loadAntiGui()
 			resizing = false
 		end
 	end)
+
 	closeBtn.MouseButton1Click:Connect(function()
 		for k in pairs(gen) do stopLoop(k) end
 		enlightenLoopGen = enlightenLoopGen + 1
@@ -12974,12 +13471,14 @@ function loadAntiGui()
 		local mini = game.CoreGui:FindFirstChild("TCOAntiMini") or (plr:FindFirstChild("PlayerGui") and plr.PlayerGui:FindFirstChild("TCOAntiMini"))
 		if mini then mini:Destroy() end
 	end)
+
 	local miniGui = Instance.new("ScreenGui")
 	miniGui.Name = "TCOAntiMini"
 	miniGui.ResetOnSpawn = false
 	miniGui.Enabled = false
 	pcall(function() miniGui.Parent = game.CoreGui end)
 	if not miniGui.Parent then miniGui.Parent = plr:WaitForChild("PlayerGui") end
+
 	local miniBtn = Instance.new("TextButton")
 	miniBtn.Size = UDim2.new(0, 56, 0, 56)
 	miniBtn.Position = UDim2.new(0, 20, 0.5, -28)
@@ -12990,6 +13489,7 @@ function loadAntiGui()
 	miniBtn.TextSize = 18
 	miniBtn.Parent = miniGui
 	Instance.new("UICorner", miniBtn).CornerRadius = UDim.new(0, 6)
+
 	minBtn.MouseButton1Click:Connect(function()
 		frame.Visible = false
 		miniGui.Enabled = true
@@ -12998,6 +13498,7 @@ function loadAntiGui()
 		frame.Visible = true
 		miniGui.Enabled = false
 	end)
+
 	local dragging, dragStart, startPos
 	titleBar.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -13017,6 +13518,7 @@ function loadAntiGui()
 			dragging = false
 		end
 	end)
+
 	local mDragging, mStart, mPos
 	miniBtn.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -13036,6 +13538,7 @@ function loadAntiGui()
 			mDragging = false
 		end
 	end)
+
 	local scroll = Instance.new("ScrollingFrame")
 	scroll.Size = UDim2.new(1, -8, 1, -34)
 	scroll.Position = UDim2.new(0, 4, 0, 28)
@@ -13051,6 +13554,7 @@ function loadAntiGui()
 	list:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 		scroll.CanvasSize = UDim2.new(0, 0, 0, list.AbsoluteContentSize.Y + 10)
 	end)
+
 	local function addLabel(text)
 		local l = Instance.new("TextLabel")
 		l.Size = UDim2.new(1, -4, 0, 22)
@@ -13062,6 +13566,7 @@ function loadAntiGui()
 		l.TextXAlignment = Enum.TextXAlignment.Left
 		l.Parent = scroll
 	end
+
 	local function addToggle(text, key, onEnable, onDisable)
 		states[key] = false
 		local btn = Instance.new("TextButton")
@@ -13073,6 +13578,7 @@ function loadAntiGui()
 		btn.TextSize = 13
 		btn.Parent = scroll
 		Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+
 		btn.MouseButton1Click:Connect(function()
 			states[key] = not states[key]
 			if states[key] then
@@ -13089,7 +13595,9 @@ function loadAntiGui()
 		end)
 		return btn
 	end
+
 	addLabel("── Protections ──")
+
 	addToggle("Anti Toxify", "antiToxify", function()
 		startLoop("antiToxify", 0.3, function()
 			local char = getChar()
@@ -13116,6 +13624,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Blind", "antiBlind", function()
 		startLoop("antiBlind", 0.25, function()
 			local lighting = game:GetService("Lighting")
@@ -13138,6 +13647,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Myopic", "antiMyopic", function()
 		startLoop("antiMyopic", 0.25, function()
 			local lighting = game:GetService("Lighting")
@@ -13165,6 +13675,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Glitch / Fling", "antiGlitch", function()
 		local lastSafe = nil
 		local lastY = nil
@@ -13202,6 +13713,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Freeze", "antiFreeze", function()
 		local lastReset = 0
 		startLoop("antiFreeze", 0.15, function()
@@ -13209,6 +13721,7 @@ function loadAntiGui()
 			local hrp = getHRP()
 			local char = getChar()
 			if not hum or not hrp or not char then return end
+
 			local isFlying = false
 			if hrp:FindFirstChild("FlyBV") or hrp:FindFirstChild("FlyBG") then
 				isFlying = true
@@ -13220,23 +13733,29 @@ function loadAntiGui()
 				end
 			end
 			if isFlying then return end
+
 			local frozen = false
+
 			if hum.WalkSpeed == 0 or hum.JumpPower == 0 then
 				frozen = true
 			end
+
 			if hrp.Anchored then
 				frozen = true
 				pcall(function() hrp.Anchored = false end)
 			end
+
 			for _, v in ipairs(hrp:GetChildren()) do
 				if v:IsA("BodyPosition") and v.Name ~= "FlyBV" and v.Name ~= "FlyBG" then
 					frozen = true
 					pcall(function() v:Destroy() end)
 				end
 			end
+
 			if hum.PlatformStand and hum.WalkSpeed == 0 then
 				frozen = true
 			end
+
 			if frozen and (tick() - lastReset) > 1.5 then
 				lastReset = tick()
 				pcall(function()
@@ -13245,6 +13764,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Jail", "antiJail", function()
 		local noclipUntil = 0
 		local lastTrigger = 0
@@ -13252,6 +13772,7 @@ function loadAntiGui()
 			local hrp = getHRP()
 			local char = getChar()
 			if not hrp or not char then return end
+
 			local jailed = false
 			for _, v in ipairs(workspace:GetDescendants()) do
 				if v:IsA("BasePart") and v.CanCollide then
@@ -13264,6 +13785,7 @@ function loadAntiGui()
 					end
 				end
 			end
+
 			if not jailed then
 				local nearbyWalls = 0
 				for _, v in ipairs(workspace:GetDescendants()) do
@@ -13277,11 +13799,13 @@ function loadAntiGui()
 					jailed = true
 				end
 			end
+
 			if jailed and (tick() - lastTrigger) > 4 then
 				lastTrigger = tick()
 				noclipUntil = tick() + 3
 				notify("Jail detected - noclip 3s")
 			end
+
 			if tick() < noclipUntil then
 				for _, p in ipairs(char:GetDescendants()) do
 					if p:IsA("BasePart") then
@@ -13291,16 +13815,19 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Stun", "antiStun", function()
 		startLoop("antiStun", 0.2, function()
 			local hum = getHum()
 			local hrp = getHRP()
 			if not hum or not hrp then return end
+
 			if hrp:FindFirstChild("FlyBV") or hrp:FindFirstChild("FlyBG") then return end
 			if hrp:FindFirstChild("BodyVelocity") and hrp:FindFirstChild("BodyGyro") then
 				local bv = hrp:FindFirstChild("BodyVelocity")
 				if bv and bv.MaxForce.Magnitude > 10000 then return end
 			end
+
 			local state = hum:GetState()
 			if state == Enum.HumanoidStateType.Physics
 				or state == Enum.HumanoidStateType.Ragdoll
@@ -13315,6 +13842,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Invis", "antiInvis", function()
 		local lastReset = 0
 		startLoop("antiInvis", 0.25, function()
@@ -13336,6 +13864,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Glow", "antiGlow", function()
 		startLoop("antiGlow", 0.4, function()
 			local char = getChar()
@@ -13347,6 +13876,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Void", "antiVoid", function()
 		startLoop("antiVoid", 0.15, function()
 			local hrp = getHRP()
@@ -13358,6 +13888,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Sit", "antiSit", function()
 		startLoop("antiSit", 0.15, function()
 			local hum = getHum()
@@ -13367,6 +13898,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti AFK", "antiAFK", function()
 		startLoop("antiAFK", 30, function()
 			local vu = game:GetService("VirtualUser")
@@ -13374,6 +13906,7 @@ function loadAntiGui()
 			vu:ClickButton2(Vector2.new())
 		end)
 	end)
+
 	addToggle("Anti Fog", "antiFog", function()
 		startLoop("antiFog", 0.5, function()
 			local lighting = game:GetService("Lighting")
@@ -13384,6 +13917,7 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addToggle("Anti Smoke / Fire", "antiSmoke", function()
 		startLoop("antiSmoke", 0.5, function()
 			local char = getChar()
@@ -13396,7 +13930,10 @@ function loadAntiGui()
 			end
 		end)
 	end)
+
 	addLabel("── Special ──")
+
+
 	addToggle("Spam r6 when die", "spamR6", function()
 		local function startR6Loop()
 			enlightenLoopGen = enlightenLoopGen + 1
@@ -13415,9 +13952,11 @@ function loadAntiGui()
 				end
 			end)
 		end
+
 		local function onCharacter(char)
 			local hum = char:WaitForChild("Humanoid", 15)
 			if not hum then return end
+
 			hum.HealthChanged:Connect(function(hp)
 				if not states.spamR6 then return end
 				if hp <= 0 then
@@ -13425,12 +13964,14 @@ function loadAntiGui()
 					startR6Loop()
 				end
 			end)
+
 			hum.Died:Connect(function()
 				if not states.spamR6 then return end
 				task.wait(0.1)
 				startR6Loop()
 			end)
 		end
+
 		if plr.Character then
 			onCharacter(plr.Character)
 		end
@@ -13445,17 +13986,24 @@ function loadAntiGui()
 		end
 		autoEnlightenConn = nil
 	end)
+
+
+
+
 	notify("Anti GUI loaded")
 end
+
 lib.makelabel("Opens the Anti and Extras GUI", antitab)
 lib.makebutton("Load Anti and Extras GUI", antitab, function()
 	loadAntiGui()
 end)
+
 getgenv()._tcoOpenLagGui = function()
 	pcall(function()
 		game:GetService("StarterGui"):SetCore("SendNotification",{Title="Lag Machine",Text="Removed from commands GUI",Duration=2})
 	end)
 end
+
 do
 	local btab = lib.maketab("blame people lol")
 	lib.makelabel("Build auras at selected player (or you)", btab)
@@ -13495,6 +14043,7 @@ do
 		end
 		local p = blameFindPlayer(n)
 		local h = p and p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+		-- only go under if toggle is on (never force)
 		if h and getgenv()._tcoBlameUnder then
 			pcall(function() tcoInstantNoclipUnder(h.Position) end)
 		end
@@ -13507,6 +14056,7 @@ do
 		return findToolAny and findToolAny(name) or localplr.Backpack:FindFirstChild(name)
 	end
 	getgenv()._tcoBlameRange = getgenv()._tcoBlameRange or 35
+	
 	getgenv()._tcoBlameUnder = false
 	lib.maketoggle("Tween under target while blaming", btab, function(bool)
 		getgenv()._tcoBlameUnder = bool
@@ -13522,6 +14072,7 @@ do
 			end
 		end
 	end, false)
+
 	lib.maketextbox("Blame aura range (default 35)", btab, function(txt)
 		local n = tonumber(txt)
 		if n and n > 0 then getgenv()._tcoBlameRange = n end
@@ -13763,6 +14314,7 @@ do
 		end)
 	end, false)
 end
+
 do
 	local stab = lib.maketab("settings")
 	local cfg = getgenv()._tcoCfg or {}
@@ -13777,6 +14329,7 @@ do
 		if #t == 0 then t = {"default"} end
 		return t
 	end
+
 	lib.makelabel("--- Configs (saved on disk) ---", stab)
 	local cfgNameBox = "default"
 	lib.maketextbox("Config name to save", stab, function(txt)
@@ -13827,6 +14380,7 @@ do
 		cfg.reloadOnExecute = bool
 		save()
 	end, cfg.reloadOnExecute and true or false)
+
 	lib.makelabel("--- Intro & load ---", stab)
 	lib.maketoggle("Skip intro", stab, function(bool)
 		cfg.skipIntro = bool
@@ -13845,6 +14399,8 @@ do
 	end, cfg.loadCmds and true or false)
 	lib.makelabel("Saved to guyhub_tco_config.json (executor FS)", stab)
 end
+
+
 namecolors = {
 	peasant={150,103,102},
 	arken={4,175,236},
@@ -13865,6 +14421,7 @@ joincmds = {
 	joinvc="JoinVC",
 	joinog="JoinOG"
 }
+
 function oimremake(mdata)
 	if not spychat then
 		return
@@ -13952,6 +14509,7 @@ function oimremake(mdata)
 	end)
 	if not ok then warn("[TCO] spy chat oim error:", err) end
 end
+
 local _tcoSpyChatInstalled = false
 local _tcoSpyChatPreviousHandler = nil
 function setSpyChatHook(enabled)
@@ -13977,6 +14535,8 @@ function setSpyChatHook(enabled)
 	end
 	getgenv()._tcoSetSpyChat = setSpyChatHook
 end
+-- Spy Chat is intentionally not installed here; it must remain a true opt-in feature.
+
 lib.maketoggle("SPY CHAT", modtab, function(bool)
 	setSpyChatHook(bool)
 end, false)
@@ -14053,12 +14613,25 @@ inputbegan = game:GetService("UserInputService").InputBegan:Connect(function(inp
 		end
 	end
 end)
+
 groups = {}
+--[[groups[5345749] = {"Chosen One Enthusiasts Club",Color3.fromRGB(0,255,0)}
+groups[35956339] = {"Clementiuilo",Color3.fromRGB(108,77,59)}
+groups[33203248] = {"Roblox's Rejects",Color3.fromRGB(177,125,82)}
+groups[35155850] = {"Unchainable Mercy",Color3.fromRGB(108,77,59)}
+groups[35985581] = {"Genesis",Color3.fromRGB(82,138,174)}
+groups[33258647] = {"Union of Mirrland Communist States",Color3.fromRGB(120,0,0)}
+groups[34915496] = {"dauens silly",{0,120,0}}
+groups[34348476] = {"Frigid's silly fan club",Color3.fromRGB(0,0,200)}
+groups[34838919] = {"Cult Of Combat",Color3.fromRGB(255,0,0)}
+groups[34838919] = {"The Eternal Flame of TCO",Color3.fromRGB(255,255,0)}
+groups[35986983] = {"Realm ???",Color3.fromRGB(42,73,199)}
+groups[286855251] = {"The Mafia",Color3.fromRGB(0,0,0)}]]
 dheads = {}
 function plradded(plr)
 	local owner = scrowners[plr.UserId]
 	local enderhubperson = enderhubpeople[plr.UserId]
-	local nahhh = plr.Name == "Visible_Threat"
+	local nahhh = plr.Name == "Visible_Threat" --or plr.Name == "enzo192105"
 	local beggar = plr.Name == "Skibisaacjacob" or plr.Name == "spiralrblxofficial"
 	local group = false
 	for i,v in pairs(groups) do
@@ -14186,12 +14759,16 @@ lib.ondestroyedfunc = function()
 	offsetpart:Destroy()
 end
 end)
+
+
+-- ========== VOID PHANTOM (fling moveset + Vexro emotes) ==========
 do
 	local RS = game:GetService("RunService")
 	local UIS = game:GetService("UserInputService")
 	local TweenService = game:GetService("TweenService")
 	local Players = game:GetService("Players")
 	local lp = game.Players.LocalPlayer
+
 	local IDLE_ID = 70911307307774
 	local WALK_ID = 91882704243098
 	local RUN_ID = 76925904315215
@@ -14200,17 +14777,20 @@ do
 	local BARRAGE_ID = 120668080412453
 	local DROP_ID = 127764273000599
 	local DOMAIN_ID = 107014191831064
+
 	local LOGOS = {
 		slash = "rbxthumb://type=Asset&id=128779579295748&w=150&h=150",
 		snatch = "rbxthumb://type=Asset&id=126234379064550&w=150&h=150",
 		barrage = "rbxthumb://type=Asset&id=120668080412453&w=150&h=150",
 		domain = "rbxthumb://type=Asset&id=107014191831064&w=150&h=150",
 	}
+
 	local on, busy = false, false
 	local idleTrack, moveTrack, abilityTrack = nil, nil, nil
 	local abilityGui, inputConn, movementThread = nil, nil, nil
 	local speedValue, movementState = 16, "idle"
 	local baseFov, targetFov, savedWalkSpeed = 70, 70, 16
+
 	local function stopTrack(track, fade)
 		pcall(function()
 			if track then
@@ -14218,6 +14798,7 @@ do
 			end
 		end)
 	end
+
 	local function stopAllTracks()
 		stopTrack(abilityTrack, 0.05)
 		stopTrack(moveTrack, 0.05)
@@ -14233,6 +14814,7 @@ do
 			end
 		end)
 	end
+
 	local function resolveAnimation(id)
 		id = tostring(id):gsub("rbxassetid://", "")
 		local anim = nil
@@ -14255,15 +14837,18 @@ do
 		end
 		return anim
 	end
+
 	local function loadAnim(id, looped, priority)
 		local char = lp.Character
 		local hum = char and char:FindFirstChildOfClass("Humanoid")
 		if not hum then return nil end
+
 		local animator = hum:FindFirstChildOfClass("Animator")
 		if not animator then
 			animator = Instance.new("Animator")
 			animator.Parent = hum
 		end
+
 		local anim = resolveAnimation(id)
 		local track = nil
 		pcall(function()
@@ -14275,6 +14860,7 @@ do
 			end)
 		end
 		if not track then return nil end
+
 		track.Priority = priority or Enum.AnimationPriority.Action4
 		track.Looped = looped and true or false
 		pcall(function()
@@ -14283,6 +14869,7 @@ do
 		end)
 		return track
 	end
+
 	local function playAbilityEmote(id, looped)
 		stopTrack(abilityTrack, 0.05)
 		stopTrack(moveTrack, 0.05)
@@ -14306,6 +14893,7 @@ do
 		abilityTrack = loadAnim(id, looped == true, Enum.AnimationPriority.Action4)
 		return abilityTrack
 	end
+
 	local function resumeIdle()
 		stopTrack(abilityTrack, 0.12)
 		abilityTrack = nil
@@ -14320,6 +14908,7 @@ do
 			movementState = "idle"
 		end
 	end
+
 	local function nearestHRP(maxDist)
 		maxDist = maxDist or 120
 		local my = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
@@ -14337,6 +14926,7 @@ do
 		end
 		return best
 	end
+
 	local function softReturn(cf)
 		pcall(function()
 			local my = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
@@ -14353,6 +14943,7 @@ do
 			end
 		end)
 	end
+
 	local function flingLikeRiftSlash(target, duration)
 		if not target or not target.Parent then return end
 		if typeof(flingHold) == "function" then
@@ -14371,6 +14962,7 @@ do
 			end
 		end
 	end
+
 	local function castSlash()
 		if busy then return end
 		busy = true
@@ -14397,6 +14989,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castSnatch()
 		if busy then return end
 		busy = true
@@ -14426,6 +15019,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castBarrage()
 		if busy then return end
 		busy = true
@@ -14496,6 +15090,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castDomain()
 		if busy then return end
 		busy = true
@@ -14537,6 +15132,7 @@ do
 			busy = false
 		end)
 	end
+
 	function tcoPhantomCast(which)
 		which = tostring(which or ""):lower()
 		if which == "slash" or which == "riftslash" or which == "1" then castSlash()
@@ -14546,17 +15142,20 @@ do
 		end
 	end
 	getgenv().tcoPhantomCast = tcoPhantomCast
+
 	local function destroyGui()
 		if abilityGui then pcall(function() abilityGui:Destroy() end) end
 		abilityGui = nil
 		local old = game.CoreGui:FindFirstChild("TCOPhantomAbilities")
 		if old then old:Destroy() end
 	end
+
 	local function makeGui()
 		destroyGui()
 		local isMobile = UIS.TouchEnabled == true
 		local hasKeyboard = UIS.KeyboardEnabled == true
 		local btnSize = (isMobile and not hasKeyboard) and 48 or 58
+
 		local sg = Instance.new("ScreenGui")
 		sg.Name = "TCOPhantomAbilities"
 		sg.ResetOnSpawn = false
@@ -14565,6 +15164,7 @@ do
 		pcall(function() sg.Parent = game.CoreGui end)
 		if not sg.Parent then sg.Parent = lp:WaitForChild("PlayerGui") end
 		abilityGui = sg
+
 		local center = Instance.new("Frame")
 		center.Name = "AbilityRing"
 		center.BackgroundTransparency = 1
@@ -14572,18 +15172,22 @@ do
 		center.Position = UDim2.new(1, -8, 1, -145)
 		center.Size = UDim2.new(0, (btnSize + 8) * 4 + 8, 0, btnSize + 28)
 		center.Parent = sg
+
 		local lay = Instance.new("UIListLayout")
 		lay.FillDirection = Enum.FillDirection.Horizontal
 		lay.Padding = UDim.new(0, 8)
 		lay.Parent = center
+
 		local names = {"Rift Slash", "Soul Snatch", "Barrage", "Domain"}
 		local keys = {"slash", "snatch", "barrage", "domain"}
+
 		for i = 1, 4 do
 			local slot = Instance.new("Frame")
 			slot.Size = UDim2.new(0, btnSize + 4, 0, btnSize + 24)
 			slot.BackgroundTransparency = 1
 			slot.LayoutOrder = i
 			slot.Parent = center
+
 			local nameL = Instance.new("TextLabel")
 			nameL.Size = UDim2.new(1, 0, 0, 12)
 			nameL.BackgroundTransparency = 1
@@ -14593,6 +15197,7 @@ do
 			nameL.Font = Enum.Font.GothamBold
 			nameL.TextTruncate = Enum.TextTruncate.AtEnd
 			nameL.Parent = slot
+
 			local btn = Instance.new("ImageButton")
 			btn.Name = keys[i]
 			btn.Size = UDim2.new(0, btnSize, 0, btnSize)
@@ -14603,10 +15208,12 @@ do
 			btn.ScaleType = Enum.ScaleType.Fit
 			btn.Parent = slot
 			Instance.new("UICorner", btn).CornerRadius = UDim.new(1, 0)
+
 			local stroke = Instance.new("UIStroke")
 			stroke.Color = Color3.fromRGB(140, 100, 255)
 			stroke.Thickness = 2.5
 			stroke.Parent = btn
+
 			local keyL = Instance.new("TextLabel")
 			keyL.Size = UDim2.new(1, 0, 0, 14)
 			keyL.Position = UDim2.new(0, 0, 1, -14)
@@ -14616,11 +15223,13 @@ do
 			keyL.TextSize = 12
 			keyL.Font = Enum.Font.GothamBold
 			keyL.Parent = btn
+
 			btn.MouseButton1Click:Connect(function()
 				tcoPhantomCast(keys[i])
 			end)
 		end
 	end
+
 	local function movementLoop()
 		if movementThread then return end
 		movementThread = task.spawn(function()
@@ -14673,6 +15282,7 @@ do
 			movementThread = nil
 		end)
 	end
+
 	function tcoPhantomSetEnabled(enabled)
 		on = enabled and true or false
 		getgenv()._tcoPhantomOn = on
@@ -14696,6 +15306,7 @@ do
 			movementState = "idle"
 			return
 		end
+
 		pcall(function()
 			local cam = workspace.CurrentCamera
 			if cam then baseFov = cam.FieldOfView targetFov = baseFov end
@@ -14724,40 +15335,50 @@ do
 		end)
 	end
 	getgenv().tcoPhantomSetEnabled = tcoPhantomSetEnabled
+
 	if getgenv()._tcoPhantomPending then
 		getgenv()._tcoPhantomPending = nil
 		tcoPhantomSetEnabled(true)
 	end
 end
+
+
+-- ========== GRIEFER MOVESET (bkit + delete bypass) ==========
 do
 	local RS = game:GetService("RunService")
 	local UIS = game:GetService("UserInputService")
 	local Players = game:GetService("Players")
 	local lp = game.Players.LocalPlayer
-	local IDLE_ID = 76361248833307
-	local WALK_ID = 103108206614856
-	local RUN_ID = 138431313591911
-	local MADNESS_ID = 115344615095212
-	local SCREAM_ID = 106126238069740
-	local PUNCH_ID = 132934182261872
-	local RISE_ID = 110047392616015
-	local FINAL_ID = 110914756664020
+
+	-- Updated Griefer animation set: darker, more aggressive UGC/Vexro-compatible animations.
+	local IDLE_ID = 76361248833307       -- Godly Aura fly pose idle
+	local WALK_ID = 103108206614856      -- Forsaken c00lkidd Walk
+	local RUN_ID = 138431313591911       -- Zombie Run
+	local MADNESS_ID = 115344615095212   -- Angry Rage Emote
+	local SCREAM_ID = 106126238069740    -- Screaming Emote
+	local PUNCH_ID = 132934182261872     -- Raiden Punching Armstrong Loop
+	local RISE_ID = 110047392616015      -- Aura Ascend and Shatter
+	local FINAL_ID = 110914756664020     -- Final Boss Levitate
+
 	local LOGOS = {
 		madness = "rbxthumb://type=Asset&id=6034754445&w=150&h=150",
 		scream = "rbxthumb://type=Asset&id=6031094678&w=150&h=150",
 		punch = "rbxthumb://type=Asset&id=6034287594&w=150&h=150",
 		final = "rbxthumb://type=Asset&id=6031229350&w=150&h=150",
 	}
+
 	local on, busy = false, false
 	local idleTrack, walkTrack, runTrack, abilityTrack = nil, nil, nil, nil
 	local abilityGui, inputConn = nil, nil
 	local buildUp, baseFov, maxSpeed = 0, 70, 40
+
 	local function stopTracks()
 		for _, t in pairs({idleTrack, walkTrack, runTrack, abilityTrack}) do
 			pcall(function() if t then t:Stop(0.1) end end)
 		end
 		idleTrack, walkTrack, runTrack, abilityTrack = nil, nil, nil, nil
 	end
+
 	local function loadAnim(id, looped, priority)
 		local char = lp.Character
 		local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -14785,12 +15406,14 @@ do
 		pcall(function() track:Play(0.12) end)
 		return track
 	end
+
 	local function setFov(v)
 		pcall(function()
 			local cam = workspace.CurrentCamera
 			if cam then cam.FieldOfView = v end
 		end)
 	end
+
 	local function warnBkit()
 		task.spawn(function()
 			local sg = Instance.new("ScreenGui")
@@ -14818,11 +15441,13 @@ do
 			sg:Destroy()
 		end)
 	end
+
 	local function hasBkit()
 		return (typeof(hasToolInInventory) == "function" and (hasToolInInventory("Build") or hasToolInInventory("Delete") or hasToolInInventory("Paint")))
 			or (lp.Backpack and (lp.Backpack:FindFirstChild("Build") or lp.Backpack:FindFirstChild("Delete")))
 			or (lp.Character and (lp.Character:FindFirstChild("Build") or lp.Character:FindFirstChild("Delete")))
 	end
+
 	local function ensureDeleteReady()
 		pcall(function()
 			local tool = nil
@@ -14844,6 +15469,7 @@ do
 			end
 			if typeof(refreshDeleteCache) == "function" then refreshDeleteCache() end
 			if typeof(refreshToolBypass) == "function" then refreshToolBypass("Delete") end
+			-- re-equip after micro-bypass so remotes stay live during long abilities
 			pcall(function()
 				local bag = lp.Backpack
 				local char = lp.Character
@@ -14853,6 +15479,7 @@ do
 			if typeof(refreshDeleteCache) == "function" then refreshDeleteCache() end
 		end)
 	end
+
 	local function deleteAhead(dist)
 		ensureDeleteReady()
 		pcall(function()
@@ -14885,6 +15512,7 @@ do
 			end
 		end)
 	end
+
 	local function deleteAuraPulse(range)
 		ensureDeleteReady()
 		pcall(function()
@@ -14907,6 +15535,7 @@ do
 			end
 		end)
 	end
+
 	local function softAntiToxify(seconds)
 		getgenv()._tcoCmdStates = getgenv()._tcoCmdStates or {}
 		getgenv()._tcoCmdStates.antiToxify = true
@@ -14914,6 +15543,7 @@ do
 			if getgenv()._tcoCmdStates then getgenv()._tcoCmdStates.antiToxify = false end
 		end)
 	end
+
 	local function castMadness()
 		if busy then return end
 		busy = true
@@ -14945,6 +15575,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castScream()
 		if busy then return end
 		busy = true
@@ -14961,6 +15592,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castPunch()
 		if busy then return end
 		busy = true
@@ -15005,6 +15637,7 @@ do
 			busy = false
 		end)
 	end
+
 	local function castFinal()
 		if busy then return end
 		busy = true
@@ -15039,6 +15672,7 @@ do
 			busy = false
 		end)
 	end
+
 	function tcoGrieferCast(which)
 		which = tostring(which or ""):lower()
 		if which == "madness" or which == "1" then castMadness()
@@ -15048,12 +15682,14 @@ do
 		end
 	end
 	getgenv().tcoGrieferCast = tcoGrieferCast
+
 	local function destroyGui()
 		if abilityGui then pcall(function() abilityGui:Destroy() end) end
 		abilityGui = nil
 		local old = game.CoreGui:FindFirstChild("TCOGrieferAbilities")
 		if old then old:Destroy() end
 	end
+
 	local function makeGui()
 		destroyGui()
 		local isMobile = UIS.TouchEnabled == true
@@ -15118,6 +15754,7 @@ do
 			btn.MouseButton1Click:Connect(function() tcoGrieferCast(keys[i]) end)
 		end
 	end
+
 	function tcoGrieferSetEnabled(enabled)
 		on = enabled and true or false
 		getgenv()._tcoGrieferOn = on
@@ -15204,4 +15841,5 @@ do
 		tcoGrieferSetEnabled(true)
 	end
 end
+
 if not success then warn("[TCO]", err) print(err,"TCOExtrasError") end
